@@ -22,6 +22,35 @@ export default function NuevaConsultaPage() {
     return `${minutos}:${segundos}`;
   }
 
+  function obtenerMimeTypeGrabacion() {
+    if (typeof window === "undefined" || typeof MediaRecorder === "undefined") {
+      return "";
+    }
+
+    const candidatos = [
+      "audio/mp4;codecs=mp4a.40.2",
+      "audio/mp4",
+      "audio/webm;codecs=opus",
+      "audio/webm",
+    ];
+
+    for (const tipo of candidatos) {
+      if (MediaRecorder.isTypeSupported(tipo)) {
+        return tipo;
+      }
+    }
+
+    return "";
+  }
+
+  function obtenerExtensionDesdeMimeType(mimeType: string) {
+    if (mimeType.includes("mp4")) return "mp4";
+    if (mimeType.includes("mpeg")) return "mp3";
+    if (mimeType.includes("wav")) return "wav";
+    if (mimeType.includes("ogg")) return "ogg";
+    return "webm";
+  }
+
   const params = useParams();
   const router = useRouter();
   const pacienteId = params.id as string;
@@ -250,7 +279,11 @@ export default function NuevaConsultaPage() {
       streamRef.current = stream;
       iniciarAnalisisAudio(stream);
 
-      const mediaRecorder = new MediaRecorder(stream);
+      const mimeType = obtenerMimeTypeGrabacion();
+
+      const mediaRecorder = mimeType
+        ? new MediaRecorder(stream, { mimeType })
+        : new MediaRecorder(stream);
 
       mediaRecorderRef.current = mediaRecorder;
       chunksRef.current = [];
@@ -262,11 +295,17 @@ export default function NuevaConsultaPage() {
       };
 
       mediaRecorder.onstop = () => {
-        const blob = new Blob(chunksRef.current, { type: "audio/webm" });
+        const tipoFinal = mediaRecorder.mimeType || mimeType || "audio/webm";
+        const extension = obtenerExtensionDesdeMimeType(tipoFinal);
+
+        const blob = new Blob(chunksRef.current, {
+          type: tipoFinal,
+        });
+
         const archivoGrabado = new File(
           [blob],
-          `consulta-grabada-${Date.now()}.webm`,
-          { type: "audio/webm" }
+          `consulta-grabada-${Date.now()}.${extension}`,
+          { type: tipoFinal }
         );
 
         setAudioFile(archivoGrabado);

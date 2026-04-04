@@ -14,13 +14,24 @@ type Paciente = {
   created_at: string;
 };
 
+type ConsultaResumen = {
+  id: string;
+  paciente_id: string;
+  created_at: string | null;
+  motivo_consulta: string | null;
+};
+
+type PacienteConUltimaConsulta = Paciente & {
+  ultimaConsulta: ConsultaResumen | null;
+};
+
 export default function DashboardPage() {
   const router = useRouter();
-    const [pacientes, setPacientes] = useState<Paciente[]>([]);
+
+  const [pacientes, setPacientes] = useState<PacienteConUltimaConsulta[]>([]);
   const [cargando, setCargando] = useState(true);
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [mensajeError, setMensajeError] = useState("");
-  const [emailUsuario, setEmailUsuario] = useState("");
   const [busqueda, setBusqueda] = useState("");
 
   useEffect(() => {
@@ -36,12 +47,11 @@ export default function DashboardPage() {
       if (userError || !user) {
         setMensajeError("No se pudo obtener el usuario autenticado.");
         setCargando(false);
-
         return;
       }
-       const profile = await getUserProfile();
+
+      const profile = await getUserProfile();
       setUserProfile(profile);
-      setEmailUsuario(user.email || "");
 
       if (profile && profile.activo === false) {
         setMensajeError("Tu usuario está desactivado. Contacta al administrador.");
@@ -50,43 +60,80 @@ export default function DashboardPage() {
         router.push("/");
         return;
       }
-      const { data, error } = await supabase
+
+      const { data: pacientesData, error: pacientesError } = await supabase
         .from("pacientes")
         .select("id, nombre, apellido, created_at")
         .eq("user_id", user.id)
         .order("created_at", { ascending: false });
 
-      if (error) {
-        setMensajeError(`Error al cargar pacientes: ${error.message}`);
+      if (pacientesError) {
+        setMensajeError(`Error al cargar pacientes: ${pacientesError.message}`);
         setCargando(false);
         return;
       }
 
-      setPacientes(data || []);
+      const pacientesBase = pacientesData || [];
+
+      if (pacientesBase.length === 0) {
+        setPacientes([]);
+        setCargando(false);
+        return;
+      }
+
+      const pacienteIds = pacientesBase.map((p) => p.id);
+
+      const { data: consultasData, error: consultasError } = await supabase
+        .from("consultas")
+        .select("id, paciente_id, created_at, motivo_consulta")
+        .in("paciente_id", pacienteIds)
+        .order("created_at", { ascending: false });
+
+      if (consultasError) {
+        setMensajeError(
+          `Error al cargar últimas consultas: ${consultasError.message}`
+        );
+        setCargando(false);
+        return;
+      }
+
+      const mapaUltimaConsulta = new Map<string, ConsultaResumen>();
+
+      (consultasData || []).forEach((consulta) => {
+        if (!mapaUltimaConsulta.has(consulta.paciente_id)) {
+          mapaUltimaConsulta.set(consulta.paciente_id, consulta);
+        }
+      });
+
+      const pacientesConUltimaConsulta: PacienteConUltimaConsulta[] =
+        pacientesBase.map((paciente) => ({
+          ...paciente,
+          ultimaConsulta: mapaUltimaConsulta.get(paciente.id) || null,
+        }));
+
+      setPacientes(pacientesConUltimaConsulta);
       setCargando(false);
     }
 
     cargarPacientes();
-  }, []);
-    const pacientesFiltrados = pacientes.filter((paciente) => {
+  }, [router]);
+
+  const pacientesFiltrados = pacientes.filter((paciente) => {
     const texto = `${paciente.nombre} ${paciente.apellido}`.toLowerCase();
     return texto.includes(busqueda.toLowerCase().trim());
   });
 
-  async function handleLogout() {
-  await supabase.auth.signOut();
-  router.push("/");
-}
-
   return (
     <main className="min-h-screen bg-gray-100 p-8">
-                       <AppHeader
+      <AppHeader
         titulo="Panel de pacientes"
         subtitulo="Gestión clínica"
-       nombreProfesional={userProfile?.nombre_profesional || undefined}
-nombreUsuario={userProfile?.nombre || undefined}
+        nombreProfesional={userProfile?.nombre_profesional || undefined}
+        nombreUsuario={userProfile?.nombre || undefined}
+        rol={userProfile?.rol}
       />
-            <div className="mx-auto max-w-5xl">
+
+      <div className="mx-auto max-w-5xl">
         <section className="mb-6 rounded-2xl bg-white p-4 shadow-sm">
           <div className="flex flex-col gap-4 md:flex-row md:items-center">
             <div className="shrink-0">
@@ -143,7 +190,7 @@ nombreUsuario={userProfile?.nombre || undefined}
           </div>
         )}
 
-                {!cargando && !mensajeError && pacientes.length === 0 && (
+        {!cargando && !mensajeError && pacientes.length === 0 && (
           <div className="rounded-xl bg-white p-4 shadow">
             <p className="text-gray-600">No hay pacientes cargados.</p>
           </div>
@@ -160,7 +207,7 @@ nombreUsuario={userProfile?.nombre || undefined}
             </div>
           )}
 
-                        {!cargando && !mensajeError && pacientesFiltrados.length > 0 && (
+        {!cargando && !mensajeError && pacientesFiltrados.length > 0 && (
           <div className="space-y-4">
             {pacientesFiltrados.map((paciente) => (
               <div
@@ -176,9 +223,28 @@ nombreUsuario={userProfile?.nombre || undefined}
                       {paciente.nombre} {paciente.apellido}
                     </h2>
 
-                    <p className="mt-1 text-sm text-gray-500">
-                      Sin consultas registradas por ahora
-                    </p>
+                    {paciente.ultimaConsulta ? (
+                      <>
+                        <p className="mt-1 text-sm text-gray-600">
+                          Última consulta:{" "}
+                          {paciente.ultimaConsulta.created_at
+                            ? new Date(
+                                paciente.ultimaConsulta.created_at
+                              ).toLocaleDateString("es-ES")
+                            : "Fecha no informada"}
+                        </p>
+
+                        <p className="mt-1 text-sm text-gray-500">
+                          Motivo:{" "}
+                          {paciente.ultimaConsulta.motivo_consulta ||
+                            "Sin motivo informado"}
+                        </p>
+                      </>
+                    ) : (
+                      <p className="mt-1 text-sm text-gray-500">
+                        Sin consultas registradas por ahora
+                      </p>
+                    )}
 
                     <p className="mt-2 text-xs text-gray-400">
                       Alta: {new Date(paciente.created_at).toLocaleString("es-ES")}
@@ -199,6 +265,15 @@ nombreUsuario={userProfile?.nombre || undefined}
                     >
                       Nueva consulta
                     </Link>
+
+                    {paciente.ultimaConsulta && (
+                      <Link
+                        href={`/pacientes/${paciente.id}/consultas/${paciente.ultimaConsulta.id}`}
+                        className="inline-block rounded-xl border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-800 hover:bg-gray-50"
+                      >
+                        Última consulta
+                      </Link>
+                    )}
                   </div>
                 </div>
               </div>
