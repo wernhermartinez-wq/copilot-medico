@@ -391,9 +391,17 @@ export default function NuevaConsultaPage() {
         }
 
         const { error: updateError } = await supabase
-          .from("consultas")
-          .update({ audio_url: filePath })
-          .eq("id", consultaId);
+  .from("consultas")
+  .update({
+    audio_url: filePath,
+    transcripcion_estado: "procesando",
+    transcripcion_error: null,
+    borrador_estado: null,
+    borrador_error: null,
+    estado_proceso: "transcribiendo",
+    error_proceso: null,
+  })
+  .eq("id", consultaId);
 
         if (updateError) {
           console.error(updateError);

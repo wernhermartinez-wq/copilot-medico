@@ -551,10 +551,11 @@ export default function ConsultaPage() {
               </p>
             </div>
 
-            {(transcripcionProcesando ||
-              borradorProcesando ||
-              procesoListo ||
-              procesoError) && (
+            {((estadoProceso === "pendiente" && !!consulta.audio_url) ||
+  transcripcionProcesando ||
+  borradorProcesando ||
+  procesoListo ||
+  procesoError) && (
               <div
                 className={`rounded-2xl border px-5 py-4 shadow-sm transition-all duration-500 ${
                   procesoError

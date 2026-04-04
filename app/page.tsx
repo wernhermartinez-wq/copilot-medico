@@ -20,37 +20,48 @@ export default function HomePage() {
     setMensaje("");
     setTipoMensaje(null);
 
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: email.trim(),
+        password,
+      });
 
-    if (error) {
+      console.log("Resultado login:", { data, error });
+
+      if (error) {
+        setTipoMensaje("error");
+        setMensaje(`Error al iniciar sesión: ${error.message}`);
+        setCargando(false);
+        return;
+      }
+
+      setTipoMensaje("ok");
+      setMensaje("Sesión iniciada correctamente.");
+
+      router.push("/dashboard");
+    } catch (err: any) {
+      console.error("Excepción real en login:", err);
+
       setTipoMensaje("error");
-      setMensaje(`Error al iniciar sesión: ${error.message}`);
+      setMensaje(
+        `Error al iniciar sesión: ${err?.message || "Error de red o conexión con Supabase."}`
+      );
+    } finally {
       setCargando(false);
-      return;
     }
-
-    setTipoMensaje("ok");
-    setMensaje("Sesión iniciada correctamente.");
-
-    router.push("/dashboard");
   }
 
   return (
     <main className="min-h-screen bg-gray-100 flex items-center justify-center p-6">
       <div className="bg-white shadow-lg rounded-xl p-10 w-full max-w-xl space-y-6">
-        
-        {/* LOGO + SUBTÍTULO */}
         <div className="text-center space-y-4">
-         <div className="flex justify-center pt-2">
-  <img
-    src="/logo-nexaro-medix.png"
-    alt="Nexaro Medix"
-    className="w-56 max-w-full h-auto"
-  />
-</div>
+          <div className="flex justify-center pt-2">
+            <img
+              src="/logo-nexaro-medix.png"
+              alt="Nexaro Medix"
+              className="w-56 max-w-full h-auto"
+            />
+          </div>
 
           <p className="text-gray-600">
             Asistente clínico con IA para consultas médicas.
