@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
+import AppHeader from "@/components/AppHeader";
 
 export default function NuevoPacientePage() {
   const router = useRouter();
@@ -69,105 +70,111 @@ export default function NuevoPacientePage() {
   }
 
   return (
-    <main className="min-h-screen bg-gray-100 p-8">
-      <div className="mx-auto max-w-3xl">
-        <header className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Nuevo paciente</h1>
-          <p className="text-gray-600">Registrar nuevo paciente</p>
-        </header>
+    <>
+      <AppHeader
+        titulo="Nuevo paciente"
+        subtitulo="Registrar nuevo paciente"
+        nombreProfesional="W.Martinez"
+        rol="SEO"
+        backHref="/dashboard"
+        backLabel="Volver al panel"
+      />
 
-        <section className="rounded-2xl bg-white p-6 shadow-sm">
-          <form className="space-y-5" onSubmit={handleSubmit}>
-            <div>
-              <label className="mb-2 block text-sm font-medium text-gray-700">
-                Nombre
-              </label>
-              <input
-                type="text"
-                value={nombre}
-                onChange={(e) => setNombre(e.target.value)}
-                className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none"
-                placeholder="Ej. Ana"
-                required
-              />
-            </div>
+      <main className="min-h-screen bg-gray-100 p-8">
+        <div className="mx-auto max-w-3xl">
+          <section className="rounded-2xl bg-white p-6 shadow-sm">
+            <form className="space-y-5" onSubmit={handleSubmit}>
+              <div>
+                <label className="mb-2 block text-sm font-medium text-gray-700">
+                  Nombre
+                </label>
+                <input
+                  type="text"
+                  value={nombre}
+                  onChange={(e) => setNombre(e.target.value)}
+                  className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none"
+                  placeholder="Ej. Ana"
+                  required
+                />
+              </div>
 
-            <div>
-              <label className="mb-2 block text-sm font-medium text-gray-700">
-                Apellido
-              </label>
-              <input
-                type="text"
-                value={apellido}
-                onChange={(e) => setApellido(e.target.value)}
-                className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none"
-                placeholder="Ej. López"
-                required
-              />
-            </div>
+              <div>
+                <label className="mb-2 block text-sm font-medium text-gray-700">
+                  Apellido
+                </label>
+                <input
+                  type="text"
+                  value={apellido}
+                  onChange={(e) => setApellido(e.target.value)}
+                  className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none"
+                  placeholder="Ej. López"
+                  required
+                />
+              </div>
 
-            <div>
-              <label className="mb-2 block text-sm font-medium text-gray-700">
-                Fecha de nacimiento
-              </label>
-              <input
-                type="date"
-                value={fechaNacimiento}
-                onChange={(e) => setFechaNacimiento(e.target.value)}
-                className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none"
-              />
-            </div>
+              <div>
+                <label className="mb-2 block text-sm font-medium text-gray-700">
+                  Fecha de nacimiento
+                </label>
+                <input
+                  type="date"
+                  value={fechaNacimiento}
+                  onChange={(e) => setFechaNacimiento(e.target.value)}
+                  className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none"
+                />
+              </div>
 
-            <div>
-              <label className="mb-2 block text-sm font-medium text-gray-700">
-                Teléfono
-              </label>
-              <input
-                type="text"
-                value={telefono}
-                onChange={(e) => setTelefono(e.target.value)}
-                className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none"
-                placeholder="Ej. 600111222"
-              />
-            </div>
+              <div>
+                <label className="mb-2 block text-sm font-medium text-gray-700">
+                  Teléfono
+                </label>
+                <input
+                  type="text"
+                  value={telefono}
+                  onChange={(e) => setTelefono(e.target.value)}
+                  className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none"
+                  placeholder="Ej. 600111222"
+                />
+              </div>
 
-            <div>
-              <label className="mb-2 block text-sm font-medium text-gray-700">
-                Observaciones
-              </label>
-              <textarea
-                value={observaciones}
-                onChange={(e) => setObservaciones(e.target.value)}
-                className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none"
-                rows={4}
-                placeholder="Observaciones clínicas o generales"
-              />
-            </div>
+              <div>
+                <label className="mb-2 block text-sm font-medium text-gray-700">
+                  Observaciones
+                </label>
+                <textarea
+                  value={observaciones}
+                  onChange={(e) => setObservaciones(e.target.value)}
+                  className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none"
+                  rows={4}
+                  placeholder="Observaciones clínicas o generales"
+                />
+              </div>
 
-            <div className="flex justify-end">
-              <button
-                type="submit"
-                disabled={guardando}
-                className="rounded-xl bg-black px-5 py-3 text-white disabled:opacity-60"
+              <div className="flex justify-end">
+                <button
+                  type="submit"
+                  disabled={guardando}
+                  className="rounded-xl bg-black px-5 py-3 text-white disabled:opacity-60"
+                >
+                  {guardando ? "Guardando..." : "Guardar paciente"}
+                </button>
+              </div>
+            </form>
+
+            {mensaje && (
+              <div
+                className={`mt-6 rounded-xl px-4 py-3 ${
+                  tipoMensaje === "ok"
+                    ? "border border-green-300 bg-green-50 text-green-800"
+                    : "border border-red-300 bg-red-50 text-red-800"
+                }`}
               >
-                {guardando ? "Guardando..." : "Guardar paciente"}
-              </button>
-            </div>
-          </form>
-
-          {mensaje && (
-            <div
-              className={`mt-6 rounded-xl px-4 py-3 ${
-                tipoMensaje === "ok"
-                  ? "border border-green-300 bg-green-50 text-green-800"
-                  : "border border-red-300 bg-red-50 text-red-800"
-              }`}
-            >
-              {mensaje}
-            </div>
-          )}
-        </section>
-      </div>
-    </main>
+                {mensaje}
+              </div>
+            )}
+          </section>
+        </div>
+      </main>
+    </>
   );
 }
