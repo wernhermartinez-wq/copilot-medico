@@ -25,10 +25,10 @@ type Consulta = {
 
 export default function PacientePage() {
   const router = useRouter();
-  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const params = useParams();
   const id = params.id as string;
 
+  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [paciente, setPaciente] = useState<Paciente | null>(null);
   const [consultas, setConsultas] = useState<Consulta[]>([]);
   const [cargando, setCargando] = useState(true);
@@ -92,7 +92,7 @@ export default function PacientePage() {
     }
 
     cargarFicha();
-    }, [id]);
+  }, [id, router]);
 
   if (cargando) {
     return (
@@ -106,6 +106,7 @@ export default function PacientePage() {
           backHref="/dashboard"
           backLabel="Volver al panel"
         />
+
         <div className="mx-auto max-w-5xl">
           <div className="rounded-2xl bg-white p-6 shadow-sm">
             <p className="text-gray-700">Cargando ficha del paciente...</p>
@@ -127,6 +128,7 @@ export default function PacientePage() {
           backHref="/dashboard"
           backLabel="Volver al panel"
         />
+
         <div className="mx-auto max-w-5xl">
           <div className="rounded-2xl bg-white p-6 shadow-sm">
             <h1 className="mb-4 text-2xl font-bold text-red-700">
@@ -146,6 +148,7 @@ export default function PacientePage() {
       <AppHeader
         titulo="Ficha del paciente"
         subtitulo="Detalle del paciente y consultas"
+        paciente={`${paciente.nombre} ${paciente.apellido}`}
         nombreProfesional={userProfile?.nombre_profesional || undefined}
         nombreUsuario={userProfile?.nombre || undefined}
         rol={userProfile?.rol}
@@ -199,7 +202,7 @@ export default function PacientePage() {
           </div>
         </section>
 
-                <section className="rounded-2xl bg-white p-6 shadow-sm">
+        <section className="rounded-2xl bg-white p-6 shadow-sm">
           <div className="mb-4 flex items-center justify-between">
             <h2 className="text-xl font-semibold text-gray-800">
               Consultas anteriores

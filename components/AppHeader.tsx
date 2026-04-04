@@ -85,11 +85,12 @@ export default function AppHeader({
             <p className="text-sm font-medium text-gray-900">
               {nombreVisible}
             </p>
-            {rol && (
-  <p className="text-xs uppercase tracking-wide text-gray-500">
-    {rol}
-  </p>
-)}
+
+            {rol ? (
+              <p className="text-xs uppercase tracking-wide text-gray-500">
+                {rol}
+              </p>
+            ) : null}
           </div>
 
           <button

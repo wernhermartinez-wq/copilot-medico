@@ -26,7 +26,7 @@ function renderBorradorClinico(texto: string | null) {
 
   const lineas = texto.split("\n").map((linea) => linea.trim());
 
-  const elementos: ReactNode[] = [];
+  const elementos: React.ReactNode[] = [];
   let itemsLista: string[] = [];
   let parrafoActual: string[] = [];
 
@@ -35,7 +35,7 @@ function renderBorradorClinico(texto: string | null) {
       elementos.push(
         <ul
           key={`lista-${elementos.length}`}
-          className="mb-6 ml-5 list-disc space-y-2.5 rounded-lg border border-gray-100 bg-gray-50 px-5 py-4 text-[15px] leading-7 text-gray-900"
+          className="mb-4 ml-5 list-disc space-y-1 text-sm text-gray-900"
         >
           {itemsLista.map((item, index) => (
             <li key={index}>{item}</li>
@@ -51,7 +51,7 @@ function renderBorradorClinico(texto: string | null) {
       elementos.push(
         <p
           key={`parrafo-${elementos.length}`}
-          className="mb-5 text-[15px] leading-8 text-gray-800"
+          className="mb-4 text-[15px] leading-7 text-gray-800"
         >
           {parrafoActual.join(" ")}
         </p>
@@ -67,29 +67,27 @@ function renderBorradorClinico(texto: string | null) {
       continue;
     }
 
-    if (linea === "---") {
+    // 🔹 TÍTULOS (ANTES CON CAJA → AHORA LIMPIO)
+    if (linea.startsWith("###")) {
       cerrarLista();
       cerrarParrafo();
+
       elementos.push(
-        <div key={`sep-${elementos.length}`} className="my-8">
-          <div className="h-px bg-gray-200" />
-        </div>
+        <h3
+          key={`titulo-${elementos.length}`}
+          className="mt-6 mb-2 text-sm font-semibold uppercase tracking-wide text-gray-700"
+        >
+          {linea.replace(/^###\s*/, "")}
+        </h3>
       );
       continue;
     }
 
-    if (linea.startsWith("###")) {
+    if (linea === "---") {
       cerrarLista();
       cerrarParrafo();
       elementos.push(
-        <div
-          key={`titulo-${elementos.length}`}
-          className="mb-5 mt-8 rounded-lg border border-gray-200 bg-gray-50 px-4 py-3"
-        >
-          <h3 className="text-base font-bold uppercase tracking-wide text-gray-900">
-            {linea.replace(/^###\s*/, "")}
-          </h3>
-        </div>
+        <div key={`sep-${elementos.length}`} className="my-6 border-t border-gray-200" />
       );
       continue;
     }

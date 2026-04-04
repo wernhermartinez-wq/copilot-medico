@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
@@ -93,11 +92,6 @@ export default function NuevaConsultaPage() {
 
     cargarPaciente();
   }, [pacienteId, router]);
-
-  async function handleLogout() {
-    await supabase.auth.signOut();
-    router.push("/");
-  }
 
   useEffect(() => {
     return () => {
@@ -391,17 +385,17 @@ export default function NuevaConsultaPage() {
         }
 
         const { error: updateError } = await supabase
-  .from("consultas")
-  .update({
-    audio_url: filePath,
-    transcripcion_estado: "procesando",
-    transcripcion_error: null,
-    borrador_estado: null,
-    borrador_error: null,
-    estado_proceso: "transcribiendo",
-    error_proceso: null,
-  })
-  .eq("id", consultaId);
+          .from("consultas")
+          .update({
+            audio_url: filePath,
+            transcripcion_estado: "procesando",
+            transcripcion_error: null,
+            borrador_estado: null,
+            borrador_error: null,
+            estado_proceso: "transcribiendo",
+            error_proceso: null,
+          })
+          .eq("id", consultaId);
 
         if (updateError) {
           console.error(updateError);
@@ -600,16 +594,21 @@ export default function NuevaConsultaPage() {
                 </div>
 
                 {audioPreviewUrl && !grabando && (
-  <div className="rounded-xl border border-gray-200 bg-white p-3">
-    <p className="mb-2 text-sm font-medium text-gray-700">
-      Vista previa del audio
-    </p>
+                  <div className="rounded-xl border border-gray-200 bg-white p-3">
+                    <p className="mb-2 text-sm font-medium text-gray-700">
+                      Vista previa del audio
+                    </p>
 
-    <audio key={audioPreviewUrl} controls className="w-full" src={audioPreviewUrl}>
-      Tu navegador no puede reproducir este audio.
-    </audio>
-  </div>
-)}
+                    <audio
+                      key={audioPreviewUrl}
+                      controls
+                      className="w-full"
+                      src={audioPreviewUrl}
+                    >
+                      Tu navegador no puede reproducir este audio.
+                    </audio>
+                  </div>
+                )}
               </div>
             </div>
 

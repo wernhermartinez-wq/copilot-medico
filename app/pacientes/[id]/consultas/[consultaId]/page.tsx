@@ -258,7 +258,6 @@ export default function ConsultaPage() {
         console.error(data);
         setTipoMensaje("error");
         setMensaje(data?.error || "No se pudo generar el borrador clínico.");
-        setGenerando(false);
         return;
       }
 
@@ -276,13 +275,13 @@ export default function ConsultaPage() {
 
       setTipoMensaje("ok");
       setMensaje("Borrador clínico generado y guardado correctamente.");
-      setGenerando(false);
     } catch (error: any) {
       console.error(error);
       setTipoMensaje("error");
       setMensaje(
         error?.message || "Error inesperado al generar el borrador clínico."
       );
+    } finally {
       setGenerando(false);
     }
   }
@@ -417,17 +416,12 @@ export default function ConsultaPage() {
       });
   }
 
-  async function handleLogout() {
-    await supabase.auth.signOut();
-    router.push("/");
-  }
-
   if (loading) {
     return (
       <main className="min-h-screen bg-gray-100 p-8">
         <AppHeader
           titulo="Detalle de la consulta"
-          subtitulo="Error al cargar"
+          subtitulo="Cargando consulta"
           nombreProfesional={userProfile?.nombre_profesional || undefined}
           nombreUsuario={userProfile?.nombre || undefined}
           rol={userProfile?.rol}
@@ -449,7 +443,7 @@ export default function ConsultaPage() {
       <main className="min-h-screen bg-gray-100 p-8">
         <AppHeader
           titulo="Detalle de la consulta"
-          subtitulo="..."
+          subtitulo="Consulta no encontrada"
           nombreProfesional={userProfile?.nombre_profesional || undefined}
           nombreUsuario={userProfile?.nombre || undefined}
           rol={userProfile?.rol}
@@ -478,7 +472,7 @@ export default function ConsultaPage() {
   const procesoError = estadoProceso === "error";
   const puedeEditarBorrador = estadoProceso === "listo";
   const ocultarControlesAudio =
-    transcripcionProcesando || borradorProcesando || procesoListo;
+    transcripcionProcesando || borradorProcesando;
 
   let tituloProceso = "Preparando consulta...";
   let descripcionProceso =
@@ -552,10 +546,10 @@ export default function ConsultaPage() {
             </div>
 
             {((estadoProceso === "pendiente" && !!consulta.audio_url) ||
-  transcripcionProcesando ||
-  borradorProcesando ||
-  procesoListo ||
-  procesoError) && (
+              transcripcionProcesando ||
+              borradorProcesando ||
+              procesoListo ||
+              procesoError) && (
               <div
                 className={`rounded-2xl border px-5 py-4 shadow-sm transition-all duration-500 ${
                   procesoError
@@ -651,21 +645,16 @@ export default function ConsultaPage() {
 
             {!consulta.borrador_clinico &&
               transcripcionLista &&
+              !transcripcionProcesando &&
               !borradorProcesando && (
                 <div className="flex justify-end">
                   <button
-                    onClick={handleGuardarEdicion}
-                    disabled={guardando}
+                    onClick={handleGenerarBorrador}
+                    disabled={generando}
                     className="rounded-xl border border-gray-300 px-4 py-2 text-gray-800 disabled:cursor-not-allowed disabled:opacity-60"
                   >
-                    {guardando ? "Guardando..." : "Guardar cambios"}
+                    {generando ? "Generando borrador..." : "Generar borrador"}
                   </button>
-
-                  {guardadoOK && (
-                    <p className="mt-2 text-sm font-medium text-green-700">
-                      ✔ Cambios guardados correctamente
-                    </p>
-                  )}
                 </div>
               )}
 
