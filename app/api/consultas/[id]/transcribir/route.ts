@@ -3,6 +3,8 @@ import OpenAI from "openai";
 import { toFile } from "openai/uploads";
 import { createClient } from "@supabase/supabase-js";
 import { supabaseAdmin } from "@/lib/supabase-admin";
+import { generarBorradorConsulta } from "@/lib/generar-borrador-consulta";
+
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -199,36 +201,19 @@ export async function POST(
       console.log("✅ GUARDADO CORRECTO EN BD");
     }
 
-    let borradorResultado: any = null;
+   let borradorResultado: string | null = null;
 
-    try {
-      const baseUrl = new URL(request.url).origin;
-      const authHeader = request.headers.get("authorization") || "";
+try {
+  borradorResultado = await generarBorradorConsulta({
+    consultaId: id,
+    userId: user.id,
+  });
 
-      const borradorResponse = await fetch(
-        `${baseUrl}/api/consultas/${id}/generar-borrador`,
-        {
-          method: "POST",
-          headers: {
-            authorization: authHeader,
-          },
-        }
-      );
-
-      borradorResultado = await borradorResponse.json();
-
-      if (!borradorResponse.ok) {
-        console.error("ERROR GENERANDO BORRADOR:", borradorResultado);
-        throw new Error(
-          borradorResultado?.error || "Error al generar borrador."
-        );
-      } else {
-        console.log("✅ BORRADOR GENERADO:", borradorResultado);
-      }
-    } catch (borradorError: any) {
-      console.error("ERROR LLAMANDO A GENERAR-BORRADOR:", borradorError);
-      throw borradorError;
-    }
+  console.log("✅ BORRADOR GENERADO");
+} catch (borradorError: any) {
+  console.error("ERROR GENERANDO BORRADOR:", borradorError);
+  throw borradorError;
+}
 
     return NextResponse.json({
       ok: true,
