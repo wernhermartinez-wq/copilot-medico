@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { getUserProfile, type UserProfile } from "@/lib/get-user-profile";
@@ -12,7 +12,7 @@ type Paciente = {
   apellido: string;
 };
 
-export default function NuevaConsultaPage() {
+function NuevaConsultaPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -61,6 +61,7 @@ const pacienteIdParam = searchParams.get("pacienteId");
 
     return `${minutos}:${segundos}`;
   }
+  
 
   function obtenerMimeTypeGrabacion() {
     if (typeof window === "undefined" || typeof MediaRecorder === "undefined") {
