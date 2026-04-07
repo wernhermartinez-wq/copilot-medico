@@ -38,7 +38,7 @@ export default function HomePage() {
       setTipoMensaje("ok");
       setMensaje("Sesión iniciada correctamente.");
 
-      router.push("/dashboard");
+    router.push("/nueva-consulta");
     } catch (err: any) {
       console.error("Excepción real en login:", err);
 

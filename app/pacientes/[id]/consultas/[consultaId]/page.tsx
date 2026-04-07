@@ -507,7 +507,7 @@ export default function ConsultaPage() {
     <main className="min-h-screen bg-gray-100 p-8">
       <AppHeader
         titulo="Detalle de la consulta"
-        subtitulo="Transcripción, borrador clínico y acciones"
+        subtitulo="Transcripción-borrador clínico"
         paciente={`${paciente?.nombre ?? ""} ${paciente?.apellido ?? ""}`.trim()}
         nombreProfesional={userProfile?.nombre_profesional || undefined}
         nombreUsuario={userProfile?.nombre || undefined}
@@ -517,7 +517,7 @@ export default function ConsultaPage() {
         acciones={
           <Link
             href={`/pacientes/${pacienteId}/consultas/${consultaId}/pdf`}
-            className="inline-block rounded-xl bg-black px-4 py-2 text-white"
+            className="inline-block rounded-xl bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
           >
             Generar PDF
           </Link>
@@ -759,7 +759,7 @@ export default function ConsultaPage() {
                       <button
                         onClick={handleGuardarEdicion}
                         disabled={guardando || !puedeEditarBorrador}
-                        className="rounded-xl border border-gray-300 bg-white px-4 py-2 text-gray-800 disabled:opacity-60"
+                        className="rounded-xl border border-gray-300 bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 disabled:opacity-60"
                       >
                         {guardando ? "Guardando..." : "Guardar cambios"}
                       </button>

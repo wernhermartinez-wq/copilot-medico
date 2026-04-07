@@ -103,8 +103,14 @@ export default function PacientePage() {
           nombreProfesional={userProfile?.nombre_profesional || undefined}
           nombreUsuario={userProfile?.nombre || undefined}
           rol={userProfile?.rol}
-          backHref="/dashboard"
-          backLabel="Volver al panel"
+          acciones={
+            <a
+              href="/dashboard"
+              className="inline-flex items-center rounded-xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow hover:bg-blue-700 transition"
+            >
+              Ir a pacientes
+            </a>
+          }
         />
 
         <div className="mx-auto max-w-5xl">
@@ -125,8 +131,14 @@ export default function PacientePage() {
           nombreProfesional={userProfile?.nombre_profesional || undefined}
           nombreUsuario={userProfile?.nombre || undefined}
           rol={userProfile?.rol}
-          backHref="/dashboard"
-          backLabel="Volver al panel"
+          acciones={
+            <a
+              href="/dashboard"
+              className="inline-flex items-center rounded-xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow hover:bg-blue-700 transition"
+            >
+              Ir a pacientes
+            </a>
+          }
         />
 
         <div className="mx-auto max-w-5xl">
@@ -152,8 +164,14 @@ export default function PacientePage() {
         nombreProfesional={userProfile?.nombre_profesional || undefined}
         nombreUsuario={userProfile?.nombre || undefined}
         rol={userProfile?.rol}
-        backHref="/dashboard"
-        backLabel="Volver al panel"
+        acciones={
+          <a
+            href="/dashboard"
+            className="inline-flex items-center rounded-xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow hover:bg-blue-700 transition"
+          >
+            Ir a pacientes
+          </a>
+        }
       />
 
       <div className="mx-auto max-w-5xl">
@@ -169,8 +187,10 @@ export default function PacientePage() {
             </div>
 
             <Link
-              href={`/pacientes/${id}/nueva-consulta`}
-              className="inline-block rounded-xl bg-black px-4 py-3 text-sm font-medium text-white hover:bg-gray-800"
+              href={`/nueva-consulta?prefillBusqueda=${encodeURIComponent(
+                `${paciente.nombre} ${paciente.apellido}`
+              )}&pacienteId=${paciente.id}`}
+              className="inline-block rounded-xl bg-blue-600 px-4 py-3 text-sm font-medium text-white hover:bg-blue-700 transition"
             >
               Nueva consulta
             </Link>
@@ -208,7 +228,8 @@ export default function PacientePage() {
               Consultas anteriores
             </h2>
             <p className="text-sm text-gray-500">
-              {consultas.length} {consultas.length === 1 ? "consulta" : "consultas"}
+              {consultas.length}{" "}
+              {consultas.length === 1 ? "consulta" : "consultas"}
             </p>
           </div>
 

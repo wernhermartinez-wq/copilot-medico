@@ -41,15 +41,21 @@ export default function AppHeader({
   }
 
   return (
-    <header className="border-b bg-white">
+    <header
+  className="border-b text-white"
+  style={{
+    background: "linear-gradient(90deg, #0c306e 0%, #0f54bb 40%, #34e2d1 100%)"
+  }}
+>
       <div className="mx-auto flex max-w-6xl items-start justify-between gap-4 px-6 py-4">
         <div className="flex min-w-0 items-start gap-4">
           <div className="hidden shrink-0 sm:flex">
-            <img
-              src="/logo-nexaro-medix.png"
-              alt="Nexaro Medix"
-              className="h-23 w-auto object-contain"
-            />
+           <img
+  src="/logo-nexaro-medix-blanco.png"
+  alt="Nexaro Medix"
+  className="w-auto object-contain"
+  style={{ height: "110px" }}
+/>
           </div>
 
           <div className="min-w-0">
@@ -57,21 +63,21 @@ export default function AppHeader({
               <div className="mb-2">
                 <Link
                   href={backHref}
-                  className="text-sm text-blue-600 hover:underline"
+                  className="text-sm text-white-600 hover:underline"
                 >
                   ← {backLabel}
                 </Link>
               </div>
             ) : null}
 
-            <h1 className="text-2xl font-bold text-gray-900">{titulo}</h1>
+            <h1 className="text-2xl font-bold text-black">{titulo}</h1>
 
-            <div className="mt-1 space-y-1 text-sm text-gray-600">
+            <div className="mt-1 space-y-1 text-sm text-white-500">
               {subtitulo && <p>{subtitulo}</p>}
 
               {paciente && (
-                <p className="text-xs uppercase tracking-wide text-gray-500">
-                  Paciente · {paciente}
+                <p className="text-xs uppercase tracking-wide text-white-500">
+                  Paciente: {paciente}
                 </p>
               )}
             </div>
@@ -82,12 +88,12 @@ export default function AppHeader({
           {acciones ? <div>{acciones}</div> : null}
 
           <div className="text-right">
-            <p className="text-sm font-medium text-gray-900">
+            <p className="text-sm font-medium text-white-900">
               {nombreVisible}
             </p>
 
             {rol ? (
-              <p className="text-xs uppercase tracking-wide text-gray-500">
+              <p className="text-xs uppercase tracking-wide text-white-500">
                 {rol}
               </p>
             ) : null}
@@ -95,7 +101,7 @@ export default function AppHeader({
 
           <button
             onClick={handleLogout}
-            className="cursor-pointer rounded-md border px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
+            className="cursor-pointer rounded-md border px-3 py-2 text-sm font-medium text-black hover:bg-gray-50"
           >
             Cerrar sesión
           </button>

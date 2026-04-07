@@ -1,12 +1,21 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import AppHeader from "@/components/AppHeader";
 
 export default function NuevoPacientePage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const returnToParam = searchParams.get("returnTo");
+
+  const returnTo =
+    returnToParam && returnToParam.includes("/nueva-consulta")
+      ? "/nueva-consulta"
+      : null;
+
   const [nombre, setNombre] = useState("");
   const [apellido, setApellido] = useState("");
   const [fechaNacimiento, setFechaNacimiento] = useState("");
@@ -59,7 +68,15 @@ export default function NuevoPacientePage() {
 
     setTipoMensaje("ok");
     setMensaje("Paciente guardado correctamente en Supabase.");
-    router.push(`/pacientes/${data.id}`);
+
+    if (returnTo) {
+      const query = new URLSearchParams();
+      query.set("prefillBusqueda", nombre.trim());
+      query.set("pacienteCreadoId", data.id);
+      router.push(`${returnTo}?${query.toString()}`);
+    } else {
+      router.push(`/pacientes/${data.id}`);
+    }
 
     setNombre("");
     setApellido("");
@@ -74,10 +91,25 @@ export default function NuevoPacientePage() {
       <AppHeader
         titulo="Nuevo paciente"
         subtitulo="Registrar nuevo paciente"
-        nombreProfesional="W.Martinez"
-        rol="SEO"
-        backHref="/dashboard"
-        backLabel="Volver al panel"
+        acciones={
+          <div className="flex items-center gap-2">
+            {returnTo ? (
+              <Link
+                href={returnTo}
+                className="inline-flex items-center rounded-xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow hover:bg-blue-700 transition"
+              >
+                Volver a nueva consulta
+              </Link>
+            ) : null}
+
+            <Link
+              href="/dashboard"
+              className="inline-flex items-center rounded-xl border border-blue-300 bg-blue-50 px-4 py-2 text-sm font-semibold text-blue-700 hover:bg-blue-100 transition"
+            >
+              Ir a pacientes
+            </Link>
+          </div>
+        }
       />
 
       <main className="min-h-screen bg-gray-100 p-8">

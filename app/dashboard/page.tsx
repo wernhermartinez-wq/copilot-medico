@@ -131,20 +131,28 @@ export default function DashboardPage() {
         nombreProfesional={userProfile?.nombre_profesional || undefined}
         nombreUsuario={userProfile?.nombre || undefined}
         rol={userProfile?.rol}
+        acciones={
+          <div className="flex items-center gap-2">
+            <Link
+              href="/nueva-consulta"
+              className="inline-flex items-center rounded-xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow hover:bg-blue-700 transition"
+            >
+              Nueva consulta
+            </Link>
+
+            <Link
+              href="/pacientes/nuevo?returnTo=/nueva-consulta"
+              className="inline-flex items-center rounded-xl border border-blue-300 bg-blue-50 px-4 py-2 text-sm font-semibold text-blue-700 hover:bg-blue-100 transition"
+            >
+              Nuevo paciente
+            </Link>
+          </div>
+        }
       />
 
       <div className="mx-auto max-w-5xl">
         <section className="mb-6 rounded-2xl bg-white p-4 shadow-sm">
           <div className="flex flex-col gap-4 md:flex-row md:items-center">
-            <div className="shrink-0">
-              <Link
-                href="/pacientes/nuevo"
-                className="inline-block rounded-xl bg-black px-4 py-3 text-sm font-medium text-white hover:bg-gray-800"
-              >
-                Nuevo paciente
-              </Link>
-            </div>
-
             <div className="flex-1">
               <input
                 type="text"
@@ -260,8 +268,10 @@ export default function DashboardPage() {
                     </Link>
 
                     <Link
-                      href={`/pacientes/${paciente.id}/nueva-consulta`}
-                      className="inline-block rounded-xl bg-black px-4 py-2 text-sm font-medium text-white hover:bg-gray-800"
+                      href={`/nueva-consulta?prefillBusqueda=${encodeURIComponent(
+                        `${paciente.nombre} ${paciente.apellido}`
+                      )}&pacienteId=${paciente.id}`}
+                      className="inline-block rounded-xl bg-black px-4 py-2 text-sm font-medium text-white"
                     >
                       Nueva consulta
                     </Link>
