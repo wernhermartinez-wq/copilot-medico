@@ -40,26 +40,29 @@ export default function DashboardPage() {
       setMensajeError("");
 
       const {
-        data: { user },
-        error: userError,
-      } = await supabase.auth.getUser();
+  data: { user },
+  error: userError,
+} = await supabase.auth.getUser();
 
-      if (userError || !user) {
-        setMensajeError("No se pudo obtener el usuario autenticado.");
-        setCargando(false);
-        return;
-      }
+if (userError || !user) {
+  setMensajeError("");
+  setPacientes([]);
+  setUserProfile(null);
+  setCargando(false);
+  router.replace("/");
+  return;
+}
 
       const profile = await getUserProfile();
       setUserProfile(profile);
 
       if (profile && profile.activo === false) {
-        setMensajeError("Tu usuario está desactivado. Contacta al administrador.");
-        setCargando(false);
-        await supabase.auth.signOut();
-        router.push("/");
-        return;
-      }
+  setMensajeError("Tu usuario está desactivado. Contacta al administrador.");
+  setCargando(false);
+  await supabase.auth.signOut();
+  router.replace("/");
+  return;
+}
 
       const { data: pacientesData, error: pacientesError } = await supabase
         .from("pacientes")

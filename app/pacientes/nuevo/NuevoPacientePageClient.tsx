@@ -1,9 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { supabase } from "@/lib/supabase";
+import { getUserProfile, type UserProfile } from "@/lib/get-user-profile";
 import AppHeader from "@/components/AppHeader";
 
 export default function NuevoPacientePageClient() {
@@ -16,6 +17,9 @@ export default function NuevoPacientePageClient() {
       ? "/nueva-consulta"
       : null;
 
+  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
+  const [authChecked, setAuthChecked] = useState(false);
+
   const [nombre, setNombre] = useState("");
   const [apellido, setApellido] = useState("");
   const [fechaNacimiento, setFechaNacimiento] = useState("");
@@ -24,6 +28,40 @@ export default function NuevoPacientePageClient() {
   const [mensaje, setMensaje] = useState("");
   const [tipoMensaje, setTipoMensaje] = useState<"ok" | "error" | null>(null);
   const [guardando, setGuardando] = useState(false);
+
+  useEffect(() => {
+    async function cargarPerfil() {
+      const {
+        data: { user },
+        error: userError,
+      } = await supabase.auth.getUser();
+
+      if (userError || !user) {
+        setTipoMensaje(null);
+        setMensaje("");
+        setUserProfile(null);
+        setAuthChecked(true);
+        router.replace("/");
+        return;
+      }
+
+      const profile = await getUserProfile();
+      setUserProfile(profile);
+
+      if (profile && profile.activo === false) {
+        setTipoMensaje(null);
+        setMensaje("");
+        setAuthChecked(true);
+        await supabase.auth.signOut();
+        router.replace("/");
+        return;
+      }
+
+      setAuthChecked(true);
+    }
+
+    cargarPerfil();
+  }, [router]);
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -86,11 +124,24 @@ export default function NuevoPacientePageClient() {
     setGuardando(false);
   }
 
+  if (!authChecked) {
+    return (
+      <main className="min-h-screen bg-gray-100 p-8">
+        <div className="mx-auto max-w-3xl rounded-2xl bg-white p-6 shadow-sm">
+          <p className="text-gray-600">Verificando sesión...</p>
+        </div>
+      </main>
+    );
+  }
+
   return (
     <>
       <AppHeader
         titulo="Nuevo paciente"
         subtitulo="Registrar nuevo paciente"
+        nombreProfesional={userProfile?.nombre_profesional || undefined}
+        nombreUsuario={userProfile?.nombre || undefined}
+        rol={userProfile?.rol}
         acciones={
           <div className="flex items-center gap-2">
             {returnTo ? (

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { supabase } from "@/lib/supabase";
+import { getUserProfile, type UserProfile } from "@/lib/get-user-profile";
 import AppHeader from "@/components/AppHeader";
 
 type Paciente = {
@@ -21,6 +22,9 @@ export default function SeleccionarPacientePageClient() {
   const returnTo = searchParams.get("returnTo") || "/pacientes";
   const qInicial = searchParams.get("q") || "";
 
+  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
+  const [authChecked, setAuthChecked] = useState(false);
+
   const [busqueda, setBusqueda] = useState(qInicial);
   const [pacientes, setPacientes] = useState<Paciente[]>([]);
   const [loading, setLoading] = useState(true);
@@ -34,9 +38,41 @@ export default function SeleccionarPacientePageClient() {
       setLoading(true);
       setError("");
 
+      const {
+        data: { user },
+        error: userError,
+      } = await supabase.auth.getUser();
+
+      if (!activo) return;
+
+      if (userError || !user) {
+        setUserProfile(null);
+        setPacientes([]);
+        setLoading(false);
+        setAuthChecked(true);
+        router.replace("/");
+        return;
+      }
+
+      const profile = await getUserProfile();
+
+      if (!activo) return;
+
+      setUserProfile(profile);
+
+      if (profile && profile.activo === false) {
+        setPacientes([]);
+        setLoading(false);
+        setAuthChecked(true);
+        await supabase.auth.signOut();
+        router.replace("/");
+        return;
+      }
+
       const { data, error } = await supabase
         .from("pacientes")
         .select("id, nombre, apellido, telefono, fecha_nacimiento")
+        .eq("user_id", user.id)
         .order("apellido", { ascending: true })
         .order("nombre", { ascending: true });
 
@@ -46,11 +82,13 @@ export default function SeleccionarPacientePageClient() {
         setError("No se pudieron cargar los pacientes.");
         setPacientes([]);
         setLoading(false);
+        setAuthChecked(true);
         return;
       }
 
       setPacientes((data as Paciente[]) || []);
       setLoading(false);
+      setAuthChecked(true);
     }
 
     cargarPacientes();
@@ -58,7 +96,7 @@ export default function SeleccionarPacientePageClient() {
     return () => {
       activo = false;
     };
-  }, []);
+  }, [router]);
 
   const pacientesFiltrados = useMemo(() => {
     const texto = busqueda.trim().toLowerCase();
@@ -96,11 +134,24 @@ export default function SeleccionarPacientePageClient() {
     router.push(construirUrlRetorno(paciente));
   }
 
+  if (!authChecked) {
+    return (
+      <main className="min-h-screen bg-gray-100 p-8">
+        <div className="mx-auto max-w-3xl rounded-2xl bg-white p-6 shadow-sm">
+          <p className="text-gray-600">Verificando sesión...</p>
+        </div>
+      </main>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gray-50">
       <AppHeader
         titulo="Buscar paciente"
         subtitulo="Selecciona un paciente para asignarlo a la nueva consulta."
+        nombreProfesional={userProfile?.nombre_profesional || undefined}
+        nombreUsuario={userProfile?.nombre || undefined}
+        rol={userProfile?.rol}
       />
 
       <main className="mx-auto max-w-3xl px-4 py-6 sm:px-6">

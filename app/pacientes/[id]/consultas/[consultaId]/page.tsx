@@ -59,6 +59,7 @@ export default function ConsultaPage() {
   const [paciente, setPaciente] = useState<Paciente | null>(null);
   const [consulta, setConsulta] = useState<Consulta | null>(null);
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
+  const [authChecked, setAuthChecked] = useState(false);
   const [loading, setLoading] = useState(true);
   const [mensaje, setMensaje] = useState("");
   const [tipoMensaje, setTipoMensaje] = useState<"ok" | "error" | null>(null);
@@ -83,9 +84,15 @@ export default function ConsultaPage() {
     } = await supabase.auth.getUser();
 
     if (userError || !user) {
-      setTipoMensaje("error");
-      setMensaje("No se pudo obtener el usuario autenticado.");
+      setTipoMensaje(null);
+      setMensaje("");
+      setPaciente(null);
+      setConsulta(null);
+      setUserProfile(null);
+      setAudioUrl(null);
       setLoading(false);
+      setAuthChecked(true);
+      router.replace("/");
       return;
     }
 
@@ -93,11 +100,15 @@ export default function ConsultaPage() {
     setUserProfile(profile);
 
     if (profile && profile.activo === false) {
-      setTipoMensaje("error");
-      setMensaje("Tu usuario está desactivado. Contacta al administrador.");
+      setTipoMensaje(null);
+      setMensaje("");
+      setPaciente(null);
+      setConsulta(null);
+      setAudioUrl(null);
       setLoading(false);
+      setAuthChecked(true);
       await supabase.auth.signOut();
-      router.push("/");
+      router.replace("/");
       return;
     }
 
@@ -112,7 +123,11 @@ export default function ConsultaPage() {
       console.error(pacienteError);
       setTipoMensaje("error");
       setMensaje("No se pudo cargar el paciente o no tienes acceso.");
+      setPaciente(null);
+      setConsulta(null);
+      setAudioUrl(null);
       setLoading(false);
+      setAuthChecked(true);
       return;
     }
 
@@ -129,7 +144,11 @@ export default function ConsultaPage() {
       console.error(consultaError);
       setTipoMensaje("error");
       setMensaje("No se pudo cargar la consulta seleccionada.");
+      setPaciente(pacienteData);
+      setConsulta(null);
+      setAudioUrl(null);
       setLoading(false);
+      setAuthChecked(true);
       return;
     }
 
@@ -153,6 +172,7 @@ export default function ConsultaPage() {
     }
 
     setLoading(false);
+    setAuthChecked(true);
   }
 
   useEffect(() => {
@@ -414,6 +434,16 @@ export default function ConsultaPage() {
       .catch((error) => {
         console.error("Error lanzando transcripción:", error);
       });
+  }
+
+  if (!authChecked) {
+    return (
+      <main className="min-h-screen bg-gray-100 p-8">
+        <div className="mx-auto max-w-4xl rounded-2xl bg-white p-6 shadow-sm">
+          <p className="text-gray-600">Verificando sesión...</p>
+        </div>
+      </main>
+    );
   }
 
   if (loading) {

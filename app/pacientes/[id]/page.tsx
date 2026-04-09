@@ -29,6 +29,7 @@ export default function PacientePage() {
   const id = params.id as string;
 
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
+  const [authChecked, setAuthChecked] = useState(false);
   const [paciente, setPaciente] = useState<Paciente | null>(null);
   const [consultas, setConsultas] = useState<Consulta[]>([]);
   const [cargando, setCargando] = useState(true);
@@ -45,8 +46,13 @@ export default function PacientePage() {
       } = await supabase.auth.getUser();
 
       if (userError || !user) {
-        setMensajeError("No se pudo obtener el usuario autenticado.");
+        setMensajeError("");
+        setPaciente(null);
+        setConsultas([]);
+        setUserProfile(null);
         setCargando(false);
+        setAuthChecked(true);
+        router.replace("/");
         return;
       }
 
@@ -54,10 +60,13 @@ export default function PacientePage() {
       setUserProfile(profile);
 
       if (profile && profile.activo === false) {
-        setMensajeError("Tu usuario está desactivado. Contacta al administrador.");
+        setMensajeError("");
+        setPaciente(null);
+        setConsultas([]);
         setCargando(false);
+        setAuthChecked(true);
         await supabase.auth.signOut();
-        router.push("/");
+        router.replace("/");
         return;
       }
 
@@ -70,7 +79,10 @@ export default function PacientePage() {
 
       if (pacienteError || !pacienteData) {
         setMensajeError("No se pudo cargar la ficha del paciente.");
+        setPaciente(null);
+        setConsultas([]);
         setCargando(false);
+        setAuthChecked(true);
         return;
       }
 
@@ -82,17 +94,31 @@ export default function PacientePage() {
 
       if (consultasError) {
         setMensajeError("No se pudieron cargar las consultas del paciente.");
+        setPaciente(pacienteData);
+        setConsultas([]);
         setCargando(false);
+        setAuthChecked(true);
         return;
       }
 
       setPaciente(pacienteData);
       setConsultas(consultasData || []);
       setCargando(false);
+      setAuthChecked(true);
     }
 
     cargarFicha();
   }, [id, router]);
+
+  if (!authChecked) {
+    return (
+      <main className="min-h-screen bg-gray-100 p-8">
+        <div className="mx-auto max-w-5xl rounded-2xl bg-white p-6 shadow-sm">
+          <p className="text-gray-700">Verificando sesión...</p>
+        </div>
+      </main>
+    );
+  }
 
   if (cargando) {
     return (

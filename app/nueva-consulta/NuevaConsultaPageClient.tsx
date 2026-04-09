@@ -21,6 +21,7 @@ export default function NuevaConsultaPageClient() {
   const pacienteIdParam = searchParams.get("pacienteId");
 
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
+  const [authChecked, setAuthChecked] = useState(false);
   const [motivoConsulta, setMotivoConsulta] = useState("");
   const [mensaje, setMensaje] = useState("");
   const [paciente, setPaciente] = useState<Paciente | null>(null);
@@ -99,8 +100,11 @@ export default function NuevaConsultaPageClient() {
       } = await supabase.auth.getUser();
 
       if (userError || !user) {
-        setTipoMensaje("error");
-        setMensaje("No se pudo obtener el usuario autenticado.");
+        setTipoMensaje(null);
+        setMensaje("");
+        setUserProfile(null);
+        setAuthChecked(true);
+        router.replace("/");
         return;
       }
 
@@ -108,11 +112,15 @@ export default function NuevaConsultaPageClient() {
       setUserProfile(profile);
 
       if (profile && profile.activo === false) {
-        setTipoMensaje("error");
-        setMensaje("Tu usuario está desactivado. Contacta al administrador.");
+        setTipoMensaje(null);
+        setMensaje("");
+        setAuthChecked(true);
         await supabase.auth.signOut();
-        router.push("/");
+        router.replace("/");
+        return;
       }
+
+      setAuthChecked(true);
     }
 
     cargarPerfil();
@@ -577,6 +585,16 @@ export default function NuevaConsultaPageClient() {
       );
       setGuardando(false);
     }
+  }
+
+  if (!authChecked) {
+    return (
+      <main className="min-h-screen bg-gray-100 p-8">
+        <div className="mx-auto max-w-4xl rounded-2xl bg-white p-6 shadow-sm">
+          <p className="text-gray-600">Verificando sesión...</p>
+        </div>
+      </main>
+    );
   }
 
   return (
