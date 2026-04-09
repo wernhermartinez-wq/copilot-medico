@@ -1,0 +1,20 @@
+{
+  "name": "Nexaro Medix",
+  "short_name": "Nexaro",
+  "icons": [
+    {
+      "src": "/nexaro_clean_192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/nexaro_clean_512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a1f44",
+  "theme_color": "#0a1f44"
+}
