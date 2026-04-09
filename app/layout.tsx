@@ -16,7 +16,6 @@ export const metadata: Metadata = {
   title: "Nexaro Medix",
   description: "Asistente clínico con IA para consultas médicas.",
   icons: {
-    icon: "/favicon.ico",
     apple: "/apple-touch-icon.png",
   },
   manifest: "/manifest.json",
