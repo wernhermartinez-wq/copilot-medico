@@ -438,9 +438,9 @@ export default function ConsultaPage() {
 
   if (!authChecked) {
     return (
-      <main className="min-h-screen bg-gray-100 p-8">
-        <div className="mx-auto max-w-4xl rounded-2xl bg-white p-6 shadow-sm">
-          <p className="text-gray-600">Verificando sesión...</p>
+      <main className="min-h-screen bg-[#f8fafc] px-4 py-6 sm:p-6 lg:p-8">
+        <div className="mx-auto max-w-4xl rounded-2xl bg-white p-4 sm:p-6 shadow-sm">
+          <p className="text-base text-gray-600">Verificando sesión...</p>
         </div>
       </main>
     );
@@ -448,7 +448,7 @@ export default function ConsultaPage() {
 
   if (loading) {
     return (
-      <main className="min-h-screen bg-gray-100 p-8">
+      <main className="min-h-screen bg-[#f8fafc] px-4 py-6 sm:p-6 lg:p-8">
         <AppHeader
           titulo="Detalle de la consulta"
           subtitulo="Cargando consulta"
@@ -460,8 +460,8 @@ export default function ConsultaPage() {
         />
 
         <div className="mx-auto max-w-4xl">
-          <div className="rounded-2xl bg-white p-6 text-gray-600 shadow-sm">
-            Cargando consulta...
+          <div className="rounded-2xl bg-white border border-gray-200 shadow-sm p-6 text-center">
+            <p className="text-sm text-gray-500">Cargando consulta...</p>
           </div>
         </div>
       </main>
@@ -470,7 +470,7 @@ export default function ConsultaPage() {
 
   if (!consulta) {
     return (
-      <main className="min-h-screen bg-gray-100 p-8">
+      <main className="min-h-screen bg-[#f8fafc] px-4 py-6 sm:p-6 lg:p-8">
         <AppHeader
           titulo="Detalle de la consulta"
           subtitulo="Consulta no encontrada"
@@ -481,13 +481,8 @@ export default function ConsultaPage() {
           backLabel="Volver a la ficha"
         />
         <div className="mx-auto max-w-4xl">
-          <div className="rounded-2xl bg-white p-6 shadow-sm">
-            <h1 className="mb-4 text-2xl font-bold text-red-700">
-              Consulta no encontrada
-            </h1>
-            <p className="text-gray-700">
-              No se pudo cargar la consulta seleccionada.
-            </p>
+          <div className="rounded-2xl bg-white border border-red-200 shadow-sm p-6 text-center">
+            <p className="text-sm text-red-600">No se pudo cargar la consulta seleccionada.</p>
           </div>
         </div>
       </main>
@@ -534,7 +529,7 @@ export default function ConsultaPage() {
   }
 
   return (
-    <main className="min-h-screen bg-gray-100 p-8">
+    <main className="min-h-screen bg-[#f8fafc] px-4 py-6 sm:p-6 lg:p-8">
       <AppHeader
         titulo="Detalle de la consulta"
         subtitulo="Transcripción-borrador clínico"
@@ -554,294 +549,290 @@ export default function ConsultaPage() {
         }
       />
 
-      <div className="mx-auto max-w-4xl">
-        <section className="rounded-2xl bg-white p-6 shadow-sm">
-          <div className="space-y-4">
+      <div className="mx-auto max-w-4xl space-y-6">
+        <section className="rounded-2xl bg-white border border-gray-200 shadow-sm p-4 sm:p-6">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <p className="text-sm font-medium text-gray-500">Fecha</p>
-              <p className="text-gray-900">
+              <p className="text-lg font-semibold text-gray-950">
                 {consulta.created_at
                   ? new Date(consulta.created_at).toLocaleDateString("es-ES")
                   : "No informada"}
               </p>
             </div>
-
             <div>
-              <p className="text-sm font-medium text-gray-500">
-                Motivo de consulta
-              </p>
-              <p className="rounded-xl border border-gray-200 bg-gray-50 p-4 text-gray-900">
-                {consulta.motivo_consulta}
+              <p className="text-sm font-medium text-gray-500">Estado</p>
+              <p className="text-lg font-semibold text-blue-600">
+                {procesoListo ? "Completado" : transcripcionProcesando ? "Transcribiendo" : borradorProcesando ? "Generando" : procesoError ? "Error" : "Pendiente"}
               </p>
             </div>
+          </div>
 
-            {((estadoProceso === "pendiente" && !!consulta.audio_url) ||
-              transcripcionProcesando ||
-              borradorProcesando ||
-              procesoListo ||
-              procesoError) && (
-              <div
-                className={`rounded-2xl border px-5 py-4 shadow-sm transition-all duration-500 ${
-                  procesoError
-                    ? "border-red-300 bg-red-50"
-                    : procesoListo
-                    ? "border-green-300 bg-green-50"
-                    : "border-blue-300 bg-blue-50"
-                }`}
-              >
-                <div className="mb-3 flex items-start justify-between gap-4">
-                  <div>
-                    <p
-                      className={`text-base font-semibold ${
-                        procesoError
-                          ? "text-red-800"
-                          : procesoListo
-                          ? "text-green-800"
-                          : "text-blue-900"
-                      }`}
-                    >
-                      {tituloProceso}
-                    </p>
-
-                    <p
-                      className={`mt-1 text-sm ${
-                        procesoError
-                          ? "text-red-700"
-                          : procesoListo
-                          ? "text-green-700"
-                          : "text-blue-800"
-                      }`}
-                    >
-                      {descripcionProceso}
-                    </p>
-                  </div>
-
-                  {!procesoListo && !procesoError && (
-                    <div className="flex items-center gap-2 pt-1">
-                      <span className="h-2.5 w-2.5 animate-pulse rounded-full bg-blue-600" />
-                      <span className="text-sm font-medium text-blue-700">
-                        En curso
-                      </span>
-                    </div>
-                  )}
-                </div>
-
-                <div className="space-y-2">
-                  <div className="h-2.5 w-full overflow-hidden rounded-full bg-white/70">
-                    <div
-                      className={`h-full rounded-full transition-all duration-700 ${
-                        procesoError
-                          ? "bg-red-500"
-                          : procesoListo
-                          ? "bg-green-500"
-                          : "bg-blue-500"
-                      }`}
-                      style={{ width: `${progresoVisual}%` }}
-                    />
-                  </div>
-
-                  <div className="flex items-center justify-between text-xs">
-                    <span
-                      className={
-                        procesoError
-                          ? "text-red-700"
-                          : procesoListo
-                          ? "text-green-700"
-                          : "text-blue-700"
-                      }
-                    >
-                      {procesoError
-                        ? "Proceso interrumpido"
-                        : procesoListo
-                        ? "Proceso completado"
-                        : "Procesamiento automático"}
-                    </span>
-
-                    <span
-                      className={`font-semibold ${
-                        procesoError
-                          ? "text-red-800"
-                          : procesoListo
-                          ? "text-green-800"
-                          : "text-blue-800"
-                      }`}
-                    >
-                      {progresoVisual}%
-                    </span>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {!consulta.borrador_clinico &&
-              transcripcionLista &&
-              !transcripcionProcesando &&
-              !borradorProcesando && (
-                <div className="flex justify-end">
-                  <button
-                    onClick={handleGenerarBorrador}
-                    disabled={generando}
-                    className="rounded-xl border border-gray-300 px-4 py-2 text-gray-800 disabled:cursor-not-allowed disabled:opacity-60"
-                  >
-                    {generando ? "Generando borrador..." : "Generar borrador"}
-                  </button>
-                </div>
-              )}
-
-            {mensaje && (
-              <div
-                className={`rounded-xl px-4 py-3 ${
-                  tipoMensaje === "ok"
-                    ? "border border-green-300 bg-green-50 text-green-800"
-                    : "border border-red-300 bg-red-50 text-red-800"
-                }`}
-              >
-                {mensaje}
-              </div>
-            )}
-
-            {!ocultarControlesAudio && (
-              <div>
-                <p className="mb-2 text-sm font-medium text-gray-500">
-                  Audio de consulta
-                </p>
-
-                <div className="space-y-3 rounded-xl border border-gray-200 bg-gray-50 p-4">
-                  <input
-                    type="file"
-                    accept=".mp3,.wav,.m4a,.webm,audio/*"
-                    onChange={(e) => setAudioFile(e.target.files?.[0] || null)}
-                    className="block w-full text-sm text-gray-700"
-                  />
-
-                  <div className="flex flex-wrap items-center gap-3">
-                    <button
-                      type="button"
-                      onClick={handleSubirAudio}
-                      disabled={!audioFile || subiendoAudio}
-                      className="rounded-xl border border-gray-300 px-4 py-2 text-gray-800 disabled:opacity-60"
-                    >
-                      {subiendoAudio ? "Subiendo audio..." : "Subir audio"}
-                    </button>
-
-                    {audioUrl && (
-                      <a
-                        href={audioUrl}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="inline-block rounded-xl border border-gray-300 px-4 py-2 text-gray-800"
-                      >
-                        Abrir audio
-                      </a>
-                    )}
-                  </div>
-
-                  {audioFile && (
-                    <p className="text-sm text-gray-600">
-                      Archivo seleccionado: {audioFile.name}
-                    </p>
-                  )}
-
-                  {audioUrl && (
-                    <audio controls className="w-full">
-                      <source src={audioUrl} />
-                      Tu navegador no soporta reproducción de audio.
-                    </audio>
-                  )}
-                </div>
-              </div>
-            )}
-
-            {consulta.transcripcion_texto && (
-              <div>
-                <p className="mb-2 text-sm font-medium uppercase tracking-wide text-gray-500">
-                  Transcripción (referencia)
-                </p>
-                <div className="max-h-40 overflow-y-auto whitespace-pre-wrap rounded-xl border border-gray-200 bg-gray-50 p-4 text-sm leading-6 text-gray-700">
-                  {consulta.transcripcion_texto}
-                </div>
-              </div>
-            )}
-
-            <div>
-              <p className="mb-3 text-base font-semibold text-gray-900">
-                Borrador clínico
-              </p>
-              {consulta.borrador_clinico ? (
-                <div className="space-y-4 rounded-2xl border border-gray-200 bg-white p-4">
-                  <textarea
-                    value={borradorEditable}
-                    onChange={(e) => setBorradorEditable(e.target.value)}
-                    rows={18}
-                    disabled={!puedeEditarBorrador}
-                    className="w-full rounded-xl border-2 border-gray-300 bg-white p-4 text-gray-900 outline-none disabled:bg-gray-100 disabled:text-gray-500"
-                  />
-
-                  {!puedeEditarBorrador && (
-                    <p className="text-sm text-gray-500">
-                      El borrador se podrá editar cuando el procesamiento
-                      automático haya finalizado.
-                    </p>
-                  )}
-
-                  <div className="flex justify-end border-t border-gray-100 pt-3">
-                    <div className="text-right">
-                      <button
-                        onClick={handleGuardarEdicion}
-                        disabled={guardando || !puedeEditarBorrador}
-                        className="rounded-xl border border-gray-300 bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 disabled:opacity-60"
-                      >
-                        {guardando ? "Guardando..." : "Guardar cambios"}
-                      </button>
-
-                      {guardadoOK && (
-                        <p className="mt-2 text-sm font-medium text-green-700">
-                          ✔ Cambios guardados correctamente
-                        </p>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              ) : (
-                <div className="rounded-2xl border border-dashed border-gray-300 bg-gray-50 p-5 text-gray-500">
-                  {transcripcionProcesando ? (
-                    <div className="space-y-3">
-                      <p>
-                        La transcripción está en proceso. El borrador clínico se
-                        generará automáticamente al finalizar esta etapa.
-                      </p>
-
-                      <div className="space-y-2">
-                        <div className="h-3 w-full animate-pulse rounded bg-gray-200" />
-                        <div className="h-3 w-11/12 animate-pulse rounded bg-gray-200" />
-                        <div className="h-3 w-9/12 animate-pulse rounded bg-gray-200" />
-                      </div>
-                    </div>
-                  ) : borradorProcesando ? (
-                    <div className="space-y-3">
-                      <p>
-                        La IA está generando el borrador clínico
-                        automáticamente. Esta pantalla se actualizará sola
-                        cuando esté listo.
-                      </p>
-
-                      <div className="space-y-2">
-                        <div className="h-3 w-full animate-pulse rounded bg-gray-200" />
-                        <div className="h-3 w-10/12 animate-pulse rounded bg-gray-200" />
-                        <div className="h-3 w-8/12 animate-pulse rounded bg-gray-200" />
-                        <div className="h-3 w-9/12 animate-pulse rounded bg-gray-200" />
-                      </div>
-                    </div>
-                  ) : procesoError ? (
-                    "El proceso encontró un error. Revisa el mensaje superior."
-                  ) : (
-                    "Aquí se mostrará el borrador clínico generado por IA a partir de la consulta."
-                  )}
-                </div>
-              )}
+          <div>
+            <p className="mb-2 text-sm font-medium text-gray-500">
+              Motivo de consulta
+            </p>
+            <div className="rounded-xl border border-gray-200 bg-gray-50 p-4 text-gray-900">
+              {consulta.motivo_consulta}
             </div>
           </div>
         </section>
+
+        {((estadoProceso === "pendiente" && !!consulta.audio_url) ||
+          transcripcionProcesando ||
+          borradorProcesando ||
+          procesoListo ||
+          procesoError) && (
+          <section
+            className={`rounded-2xl border shadow-sm p-4 sm:p-6 transition-all duration-500 ${
+              procesoError
+                ? "border-red-200 bg-red-50"
+                : procesoListo
+                ? "border-green-200 bg-green-50"
+                : "border-blue-200 bg-blue-50"
+            }`}
+          >
+            <div className="mb-4 flex items-start justify-between gap-4">
+              <div>
+                <p
+                  className={`text-lg font-semibold ${
+                    procesoError
+                      ? "text-red-800"
+                      : procesoListo
+                      ? "text-green-800"
+                      : "text-blue-900"
+                  }`}
+                >
+                  {tituloProceso}
+                </p>
+
+                <p
+                  className={`mt-1 text-sm ${
+                    procesoError
+                      ? "text-red-700"
+                      : procesoListo
+                      ? "text-green-700"
+                      : "text-blue-800"
+                  }`}
+                >
+                  {descripcionProceso}
+                </p>
+              </div>
+
+              {!procesoListo && !procesoError && (
+                <div className="flex items-center gap-2 pt-1">
+                  <span className="h-2.5 w-2.5 animate-pulse rounded-full bg-blue-600" />
+                  <span className="text-sm font-medium text-blue-700">
+                    En curso
+                  </span>
+                </div>
+              )}
+            </div>
+
+            <div className="space-y-3">
+              <div className="h-3 w-full overflow-hidden rounded-full bg-white/70">
+                <div
+                  className={`h-full rounded-full transition-all duration-700 ${
+                    procesoError
+                      ? "bg-red-500"
+                      : procesoListo
+                      ? "bg-green-500"
+                      : "bg-blue-500"
+                  }`}
+                  style={{ width: `${progresoVisual}%` }}
+                />
+              </div>
+
+              <div className="flex items-center justify-between text-xs">
+                <span
+                  className={
+                    procesoError
+                      ? "text-red-700"
+                      : procesoListo
+                      ? "text-green-700"
+                      : "text-blue-700"
+                  }
+                >
+                  {procesoError
+                    ? "Proceso interrumpido"
+                    : procesoListo
+                    ? "Proceso completado"
+                    : "Procesamiento automático"}
+                </span>
+
+                <span
+                  className={`font-semibold ${
+                    procesoError
+                      ? "text-red-800"
+                      : procesoListo
+                      ? "text-green-800"
+                      : "text-blue-800"
+                  }`}
+                >
+                  {progresoVisual}%
+                </span>
+              </div>
+            </div>
+          </section>
+        )}
+
+        <section className="rounded-2xl bg-white border border-gray-200 shadow-sm p-4 sm:p-6">
+          <h3 className="mb-4 text-lg font-semibold text-gray-800">Borrador clínico</h3>
+          {consulta.borrador_clinico ? (
+            <div className="space-y-4">
+              <textarea
+                value={borradorEditable}
+                onChange={(e) => setBorradorEditable(e.target.value)}
+                rows={18}
+                disabled={!puedeEditarBorrador}
+                className="w-full rounded-xl border border-gray-300 px-4 py-3 text-base outline-none transition focus:border-blue-500 disabled:bg-gray-100 disabled:text-gray-500 resize-none"
+              />
+
+              {!puedeEditarBorrador && (
+                <p className="text-sm text-gray-500">
+                  El borrador se podrá editar cuando el procesamiento automático haya finalizado.
+                </p>
+              )}
+
+              <div className="flex justify-end border-t border-gray-100 pt-4">
+                <div className="text-right">
+                  <button
+                    onClick={handleGuardarEdicion}
+                    disabled={guardando || !puedeEditarBorrador}
+                    className="rounded-xl bg-blue-600 px-4 py-2 text-base font-medium text-white hover:bg-blue-700 disabled:opacity-60"
+                  >
+                    {guardando ? "Guardando..." : "Guardar cambios"}
+                  </button>
+
+                  {guardadoOK && (
+                    <p className="mt-2 text-sm font-medium text-green-700">
+                      ✔ Cambios guardados correctamente
+                    </p>
+                  )}
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className="rounded-2xl border border-dashed border-gray-300 bg-gray-50 p-6 text-center">
+              {transcripcionProcesando ? (
+                <div className="space-y-3">
+                  <p className="text-sm text-gray-600">
+                    La transcripción está en proceso. El borrador clínico se generará automáticamente al finalizar esta etapa.
+                  </p>
+
+                  <div className="space-y-2">
+                    <div className="h-3 w-full animate-pulse rounded bg-gray-200" />
+                    <div className="h-3 w-11/12 animate-pulse rounded bg-gray-200" />
+                    <div className="h-3 w-9/12 animate-pulse rounded bg-gray-200" />
+                  </div>
+                </div>
+              ) : borradorProcesando ? (
+                <div className="space-y-3">
+                  <p className="text-sm text-gray-600">
+                    La IA está generando el borrador clínico automáticamente. Esta pantalla se actualizará sola cuando esté listo.
+                  </p>
+
+                  <div className="space-y-2">
+                    <div className="h-3 w-full animate-pulse rounded bg-gray-200" />
+                    <div className="h-3 w-10/12 animate-pulse rounded bg-gray-200" />
+                    <div className="h-3 w-8/12 animate-pulse rounded bg-gray-200" />
+                    <div className="h-3 w-9/12 animate-pulse rounded bg-gray-200" />
+                  </div>
+                </div>
+              ) : procesoError ? (
+                <p className="text-sm text-gray-600">El proceso encontró un error. Revisa el mensaje superior.</p>
+              ) : (
+                <p className="text-sm text-gray-600">Aquí se mostrará el borrador clínico generado por IA a partir de la consulta.</p>
+              )}
+            </div>
+          )}
+        </section>
+
+        {!consulta.borrador_clinico &&
+          transcripcionLista &&
+          !transcripcionProcesando &&
+          !borradorProcesando && (
+            <div className="flex justify-end">
+              <button
+                onClick={handleGenerarBorrador}
+                disabled={generando}
+                className="rounded-xl bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 disabled:opacity-60"
+              >
+                {generando ? "Generando borrador..." : "Generar borrador"}
+              </button>
+            </div>
+          )}
+
+        {mensaje && (
+          <div
+            className={`rounded-xl px-4 py-3 text-sm ${
+              tipoMensaje === "ok"
+                ? "border border-green-300 bg-green-50 text-green-800"
+                : "border border-red-300 bg-red-50 text-red-800"
+            }`}
+          >
+            {mensaje}
+          </div>
+        )}
+
+        {!ocultarControlesAudio && (
+          <section className="rounded-2xl bg-white border border-gray-200 shadow-sm p-4 sm:p-6">
+            <h3 className="mb-4 text-lg font-semibold text-gray-800">Audio de consulta</h3>
+            
+            <div className="space-y-4">
+              <input
+                type="file"
+                accept=".mp3,.wav,.m4a,.webm,audio/*"
+                onChange={(e) => setAudioFile(e.target.files?.[0] || null)}
+                className="block w-full text-sm text-gray-700"
+              />
+
+              <div className="flex flex-wrap items-center gap-3">
+                <button
+                  type="button"
+                  onClick={handleSubirAudio}
+                  disabled={!audioFile || subiendoAudio}
+                  className="rounded-xl bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 disabled:opacity-60"
+                >
+                  {subiendoAudio ? "Subiendo audio..." : "Subir audio"}
+                </button>
+
+                {audioUrl && (
+                  <a
+                    href={audioUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-block rounded-xl border border-gray-300 bg-white px-4 py-2 text-gray-700 hover:bg-gray-50"
+                  >
+                    Abrir audio
+                  </a>
+                )}
+              </div>
+
+              {audioFile && (
+                <p className="text-sm text-gray-600">
+                  Archivo seleccionado: {audioFile.name}
+                </p>
+              )}
+
+              {audioUrl && (
+                <audio controls className="w-full">
+                  <source src={audioUrl} />
+                  Tu navegador no soporta reproducción de audio.
+                </audio>
+              )}
+            </div>
+          </section>
+        )}
+
+        {consulta.transcripcion_texto && (
+          <section className="rounded-2xl bg-white border border-gray-200 shadow-sm p-4 sm:p-6">
+            <h3 className="mb-4 text-lg font-semibold text-gray-800">Transcripción (referencia)</h3>
+            <div className="max-h-40 overflow-y-auto whitespace-pre-wrap rounded-xl border border-gray-200 bg-gray-50 p-4 text-sm leading-6 text-gray-700">
+              {consulta.transcripcion_texto}
+            </div>
+          </section>
+        )}
       </div>
     </main>
   );

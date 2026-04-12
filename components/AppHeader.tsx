@@ -19,19 +19,11 @@ export default function AppHeader({
   titulo,
   subtitulo,
   paciente,
-  nombreUsuario,
-  nombreProfesional,
-  rol,
   backHref,
   backLabel = "Volver",
   acciones,
 }: AppHeaderProps) {
   const router = useRouter();
-
-  const nombreVisible =
-    nombreProfesional?.trim() ||
-    nombreUsuario?.trim() ||
-    "Profesional";
 
   async function handleLogout() {
     const { supabase } = await import("@/lib/supabase");
@@ -41,71 +33,66 @@ export default function AppHeader({
   }
 
   return (
-    <header
-  className="border-b text-white"
-  style={{
-    background: "linear-gradient(90deg, #0c306e 0%, #0f54bb 40%, #34e2d1 100%)"
-  }}
->
-      <div className="mx-auto flex max-w-6xl items-start justify-between gap-4 px-6 py-4">
-        <div className="flex min-w-0 items-start gap-4">
-          <div className="hidden shrink-0 sm:flex">
-           <img
-  src="/logo-nexaro-medix-blanco.png"
-  alt="Nexaro Medix"
-  className="w-auto object-contain"
-  style={{ height: "110px" }}
-/>
-          </div>
+    <header className="relative mb-0 w-full">
+      <div className="relative w-full overflow-hidden">
+        <div
+          className="absolute inset-0"
+          style={{
+            backgroundImage: "url('/premium-medical.png')",
+            backgroundSize: "cover",
+            backgroundPosition: "center top",
+            backgroundRepeat: "no-repeat",
+          }}
+        />
 
-          <div className="min-w-0">
+        <div className="absolute inset-0 bg-gradient-to-r from-[#0f2f7a]/78 via-[#2563eb]/26 to-transparent" />
+        <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-b from-transparent via-white/20 to-[#f8fafc]" />
+        <div className="absolute inset-x-0 bottom-0 h-10 rounded-t-[100%] bg-white/8 blur-2xl" />
+
+        <div className="relative w-full px-4 pb-14 pt-6 sm:px-6 sm:pb-16 sm:pt-8">
+          <div className="mt-6 max-w-[180px] sm:max-w-[270px]">
             {backHref ? (
               <div className="mb-2">
                 <Link
                   href={backHref}
-                  className="text-sm text-white-600 hover:underline"
+                  className="text-xs text-white/80 transition hover:text-white"
                 >
                   ← {backLabel}
                 </Link>
               </div>
             ) : null}
 
-            <h1 className="text-2xl font-bold text-black">{titulo}</h1>
+            <h1 className="text-[2.15rem] font-bold leading-[0.95] tracking-[-0.03em] text-white sm:text-5xl">
+              {titulo}
+            </h1>
 
-            <div className="mt-1 space-y-1 text-sm text-white-500">
-              {subtitulo && <p>{subtitulo}</p>}
+            {subtitulo ? (
+              <p className="mt-3 text-sm leading-6 text-white/90 sm:text-lg">
+                {subtitulo}
+              </p>
+            ) : null}
 
-              {paciente && (
-                <p className="text-xs uppercase tracking-wide text-white-500">
-                  Paciente: {paciente}
-                </p>
-              )}
-            </div>
-          </div>
-        </div>
-
-        <div className="flex shrink-0 items-center gap-3">
-          {acciones ? <div>{acciones}</div> : null}
-
-          <div className="text-right">
-            <p className="text-sm font-medium text-white-900">
-              {nombreVisible}
-            </p>
-
-            {rol ? (
-              <p className="text-xs uppercase tracking-wide text-white-500">
-                {rol}
+            {paciente ? (
+              <p className="mt-3 text-[11px] uppercase tracking-[0.16em] text-white/75">
+                Paciente: {paciente}
               </p>
             ) : null}
           </div>
 
-          <button
-            onClick={handleLogout}
-            className="cursor-pointer rounded-md border px-3 py-2 text-sm font-medium text-black hover:bg-gray-50"
-          >
-            Cerrar sesión
-          </button>
+          <div className="mt-6 flex justify-end gap-2">
+            {acciones ? <div className="shrink-0">{acciones}</div> : null}
+
+            <button
+              onClick={handleLogout}
+              className="shrink-0 rounded-2xl border border-white/25 bg-white/10 px-3 py-2 text-sm font-medium text-white backdrop-blur-md transition hover:bg-white/15"
+            >
+              <span className="sm:hidden">Salir</span>
+              <span className="hidden sm:inline">Cerrar sesión</span>
+            </button>
+          </div>
         </div>
+
+        <div className="absolute inset-x-0 bottom-0 h-12 bg-gradient-to-b from-transparent via-white/35 to-[#f8fafc]" />
       </div>
     </header>
   );

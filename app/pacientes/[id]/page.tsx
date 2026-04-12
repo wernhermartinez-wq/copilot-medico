@@ -112,9 +112,9 @@ export default function PacientePage() {
 
   if (!authChecked) {
     return (
-      <main className="min-h-screen bg-gray-100 p-8">
-        <div className="mx-auto max-w-5xl rounded-2xl bg-white p-6 shadow-sm">
-          <p className="text-gray-700">Verificando sesión...</p>
+      <main className="min-h-screen bg-[#f8fafc] px-4 py-6 sm:p-6 lg:p-8">
+        <div className="mx-auto max-w-4xl rounded-2xl bg-white p-4 sm:p-6 shadow-sm">
+          <p className="text-base text-gray-600">Verificando sesión...</p>
         </div>
       </main>
     );
@@ -122,7 +122,7 @@ export default function PacientePage() {
 
   if (cargando) {
     return (
-      <main className="min-h-screen bg-gray-100 p-8">
+      <main className="min-h-screen bg-[#f8fafc] px-4 py-6 sm:p-6 lg:p-8">
         <AppHeader
           titulo="Ficha del paciente"
           subtitulo="Cargando información..."
@@ -130,18 +130,18 @@ export default function PacientePage() {
           nombreUsuario={userProfile?.nombre || undefined}
           rol={userProfile?.rol}
           acciones={
-            <a
+            <Link
               href="/dashboard"
               className="inline-flex items-center rounded-xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow hover:bg-blue-700 transition"
             >
               Ir a pacientes
-            </a>
+            </Link>
           }
         />
 
-        <div className="mx-auto max-w-5xl">
-          <div className="rounded-2xl bg-white p-6 shadow-sm">
-            <p className="text-gray-700">Cargando ficha del paciente...</p>
+        <div className="mx-auto max-w-4xl">
+          <div className="rounded-2xl bg-white border border-gray-200 shadow-sm p-6 text-center">
+            <p className="text-sm text-gray-500">Cargando ficha del paciente...</p>
           </div>
         </div>
       </main>
@@ -150,7 +150,7 @@ export default function PacientePage() {
 
   if (mensajeError || !paciente) {
     return (
-      <main className="min-h-screen bg-gray-100 p-8">
+      <main className="min-h-screen bg-[#f8fafc] px-4 py-6 sm:p-6 lg:p-8">
         <AppHeader
           titulo="Ficha del paciente"
           subtitulo="Error al cargar"
@@ -158,20 +158,20 @@ export default function PacientePage() {
           nombreUsuario={userProfile?.nombre || undefined}
           rol={userProfile?.rol}
           acciones={
-            <a
+            <Link
               href="/dashboard"
               className="inline-flex items-center rounded-xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow hover:bg-blue-700 transition"
             >
               Ir a pacientes
-            </a>
+            </Link>
           }
         />
 
-        <div className="mx-auto max-w-5xl">
-          <div className="rounded-2xl bg-white p-6 shadow-sm">
-            <h1 className="mb-4 text-2xl font-bold text-red-700">
+        <div className="mx-auto max-w-4xl">
+          <div className="rounded-2xl bg-white border border-red-200 shadow-sm p-6 text-center">
+            <p className="mb-2 text-sm font-semibold text-red-600">
               Acceso no autorizado
-            </h1>
+            </p>
             <p className="text-gray-700">
               {mensajeError || "No se pudo cargar la ficha del paciente."}
             </p>
@@ -182,7 +182,7 @@ export default function PacientePage() {
   }
 
   return (
-    <main className="min-h-screen bg-gray-100 p-8">
+    <main className="min-h-screen bg-[#f8fafc] px-4 py-6 sm:p-6 lg:p-8">
       <AppHeader
         titulo="Ficha del paciente"
         subtitulo="Detalle del paciente y consultas"
@@ -191,20 +191,20 @@ export default function PacientePage() {
         nombreUsuario={userProfile?.nombre || undefined}
         rol={userProfile?.rol}
         acciones={
-          <a
+          <Link
             href="/dashboard"
             className="inline-flex items-center rounded-xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow hover:bg-blue-700 transition"
           >
             Ir a pacientes
-          </a>
+          </Link>
         }
       />
 
-      <div className="mx-auto max-w-5xl">
-        <section className="mb-6 rounded-2xl bg-white p-4 shadow-sm">
+      <div className="mx-auto max-w-4xl">
+        <section className="mb-6 rounded-2xl bg-white border border-gray-200 shadow-sm p-4 sm:p-6">
           <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <div>
-              <h2 className="text-2xl font-semibold text-gray-900">
+              <h2 className="text-2xl font-semibold text-gray-950">
                 {paciente.nombre} {paciente.apellido}
               </h2>
               <p className="mt-1 text-sm text-gray-500">
@@ -223,32 +223,36 @@ export default function PacientePage() {
           </div>
         </section>
 
-        <section className="mb-6 rounded-2xl bg-white p-6 shadow-sm">
+        <section className="mb-6 rounded-2xl bg-white border border-gray-200 shadow-sm p-4 sm:p-6">
           <h2 className="mb-4 text-xl font-semibold text-gray-800">
             Datos del paciente
           </h2>
 
-          <div className="grid gap-4 text-gray-700 md:grid-cols-2">
-            <p>
-              <strong>Nombre:</strong> {paciente.nombre} {paciente.apellido}
-            </p>
-            <p>
-              <strong>Fecha de nacimiento:</strong>{" "}
-              {paciente.fecha_nacimiento
-                ? new Date(paciente.fecha_nacimiento).toLocaleDateString("es-ES")
-                : "No informada"}
-            </p>
-            <p>
-              <strong>Teléfono:</strong> {paciente.telefono || "No informado"}
-            </p>
-            <p>
-              <strong>Observaciones:</strong>{" "}
-              {paciente.observaciones || "Sin observaciones"}
-            </p>
+          <div className="grid gap-4 md:grid-cols-2">
+            <div className="flex flex-col gap-1">
+              <span className="text-sm text-gray-500">Nombre completo</span>
+              <span className="text-base text-gray-900">{paciente.nombre} {paciente.apellido}</span>
+            </div>
+            <div className="flex flex-col gap-1">
+              <span className="text-sm text-gray-500">Fecha de nacimiento</span>
+              <span className="text-base text-gray-900">
+                {paciente.fecha_nacimiento
+                  ? new Date(paciente.fecha_nacimiento).toLocaleDateString("es-ES")
+                  : "No informada"}
+              </span>
+            </div>
+            <div className="flex flex-col gap-1">
+              <span className="text-sm text-gray-500">Teléfono</span>
+              <span className="text-base text-gray-900">{paciente.telefono || "No informado"}</span>
+            </div>
+            <div className="flex flex-col gap-1 md:col-span-2">
+              <span className="text-sm text-gray-500">Observaciones</span>
+              <span className="text-base text-gray-900">{paciente.observaciones || "Sin observaciones"}</span>
+            </div>
           </div>
         </section>
 
-        <section className="rounded-2xl bg-white p-6 shadow-sm">
+        <section className="rounded-2xl bg-white border border-gray-200 shadow-sm p-4 sm:p-6">
           <div className="mb-4 flex items-center justify-between">
             <h2 className="text-xl font-semibold text-gray-800">
               Consultas anteriores
@@ -264,7 +268,7 @@ export default function PacientePage() {
               {consultas.map((consulta) => (
                 <div
                   key={consulta.id}
-                  className="rounded-xl border border-gray-200 bg-gray-50 p-4 transition hover:border-gray-300 hover:bg-white"
+                  className="rounded-xl border border-gray-200 bg-white shadow-sm p-4 transition hover:bg-gray-50"
                 >
                   <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                     <div className="min-w-0 flex-1">
@@ -274,7 +278,7 @@ export default function PacientePage() {
                           : "Fecha no informada"}
                       </p>
 
-                      <h3 className="mt-1 text-lg font-semibold text-gray-900">
+                      <h3 className="mt-1 text-lg font-semibold text-gray-950">
                         {consulta.motivo_consulta || "Consulta sin motivo informado"}
                       </h3>
                     </div>
@@ -282,7 +286,7 @@ export default function PacientePage() {
                     <div className="shrink-0">
                       <Link
                         href={`/pacientes/${paciente.id}/consultas/${consulta.id}`}
-                        className="inline-block rounded-xl border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-800 hover:bg-gray-100"
+                        className="inline-block rounded-xl border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
                       >
                         Ver consulta
                       </Link>
@@ -292,8 +296,8 @@ export default function PacientePage() {
               ))}
             </div>
           ) : (
-            <div className="rounded-xl border border-gray-200 px-4 py-6 text-gray-500">
-              Todavía no hay consultas registradas para este paciente.
+            <div className="rounded-xl border border-gray-200 bg-white shadow-sm p-6 text-center">
+              <p className="text-sm text-gray-500">Todavía no hay consultas registradas para este paciente.</p>
             </div>
           )}
         </section>

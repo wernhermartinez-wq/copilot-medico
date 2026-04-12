@@ -136,54 +136,48 @@ export default function SeleccionarPacientePageClient() {
 
   if (!authChecked) {
     return (
-      <main className="min-h-screen bg-gray-100 p-8">
-        <div className="mx-auto max-w-3xl rounded-2xl bg-white p-6 shadow-sm">
-          <p className="text-gray-600">Verificando sesión...</p>
+      <main className="min-h-screen bg-[#f8fafc] px-4 py-6 sm:p-6 lg:p-8">
+        <div className="mx-auto max-w-4xl rounded-2xl bg-white p-4 sm:p-6 shadow-sm">
+          <p className="text-base text-gray-600">Verificando sesión...</p>
         </div>
       </main>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <main className="min-h-screen bg-[#f8fafc] px-4 py-6 sm:p-6 lg:p-8">
       <AppHeader
-        titulo="Buscar paciente"
-        subtitulo="Selecciona un paciente para asignarlo a la nueva consulta."
+        titulo="Seleccionar paciente"
+        subtitulo="Busca y selecciona un paciente para la nueva consulta."
         nombreProfesional={userProfile?.nombre_profesional || undefined}
         nombreUsuario={userProfile?.nombre || undefined}
         rol={userProfile?.rol}
       />
 
-      <main className="mx-auto max-w-3xl px-4 py-6 sm:px-6">
-        <div className="mb-6">
-          <h1 className="text-2xl font-bold text-gray-900">Buscar paciente</h1>
-          <p className="mt-2 text-sm text-gray-600">
-            Escribe nombre o apellido y selecciona el paciente para asignarlo a
-            la nueva consulta.
-          </p>
-        </div>
+      <div className="mx-auto max-w-4xl">
+        <section className="rounded-2xl bg-white border border-gray-200 shadow-sm p-4 sm:p-6 mb-6">
+          <div className="mb-4">
+            <label
+              htmlFor="busqueda-paciente"
+              className="mb-2 block text-sm font-medium text-gray-700"
+            >
+              Nombre o apellido
+            </label>
 
-        <div className="mb-4 rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
-          <label
-            htmlFor="busqueda-paciente"
-            className="mb-2 block text-sm font-medium text-gray-700"
-          >
-            Nombre o apellido
-          </label>
+            <input
+              id="busqueda-paciente"
+              type="text"
+              value={busqueda}
+              onChange={(e) => setBusqueda(e.target.value)}
+              placeholder="Ej: Juan o Pérez"
+              className="w-full rounded-xl border border-gray-300 px-4 py-3 text-base outline-none transition focus:border-blue-500"
+            />
+          </div>
 
-          <input
-            id="busqueda-paciente"
-            type="text"
-            value={busqueda}
-            onChange={(e) => setBusqueda(e.target.value)}
-            placeholder="Ej.: Juan o Pérez"
-            className="w-full rounded-xl border border-gray-300 px-4 py-3 text-base outline-none transition focus:border-blue-500"
-          />
-
-          <div className="mt-3 flex flex-wrap gap-3">
+          <div className="flex flex-col gap-2 sm:flex-row sm:gap-3">
             <Link
               href={returnTo}
-              className="inline-flex items-center rounded-xl border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-100"
+              className="w-full sm:w-auto inline-flex items-center justify-center rounded-xl border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 transition hover:bg-gray-50"
             >
               Volver
             </Link>
@@ -191,48 +185,46 @@ export default function SeleccionarPacientePageClient() {
             <button
               type="button"
               onClick={() => setBusqueda("")}
-              className="inline-flex items-center rounded-xl border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-100"
+              className="w-full sm:w-auto inline-flex items-center justify-center rounded-xl border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 transition hover:bg-gray-50"
             >
               Limpiar
             </button>
           </div>
-        </div>
+        </section>
 
-        <div className="rounded-2xl border border-gray-200 bg-white shadow-sm">
-          <div className="border-b border-gray-200 px-4 py-3">
-            <h2 className="text-sm font-semibold text-gray-800">Resultados</h2>
-          </div>
-
+        <section className="space-y-4">
           {loading ? (
-            <div className="px-4 py-6 text-sm text-gray-600">
-              Cargando pacientes...
+            <div className="rounded-2xl bg-white border border-gray-200 shadow-sm p-6 text-center">
+              <p className="text-sm text-gray-500">Cargando pacientes...</p>
             </div>
           ) : error ? (
-            <div className="px-4 py-6 text-sm text-red-600">{error}</div>
+            <div className="rounded-2xl bg-white border border-red-200 shadow-sm p-6 text-center">
+              <p className="text-sm text-red-600">{error}</p>
+            </div>
           ) : pacientesFiltrados.length === 0 ? (
-            <div className="px-4 py-6 text-sm text-gray-600">
-              No se encontraron pacientes con esa búsqueda.
+            <div className="rounded-2xl bg-white border border-gray-200 shadow-sm p-6 text-center">
+              <p className="text-sm text-gray-500">No se encontraron pacientes con esa búsqueda.</p>
             </div>
           ) : (
-            <div className="divide-y divide-gray-200">
-              {pacientesFiltrados.map((paciente) => (
-                <button
-                  key={paciente.id}
-                  type="button"
-                  onClick={() => handleSeleccionarPaciente(paciente)}
-                  disabled={seleccionandoId === paciente.id}
-                  className="flex w-full flex-col items-start gap-2 px-4 py-4 text-left transition hover:bg-gray-50 disabled:opacity-60"
-                >
-                  <div className="text-base font-semibold text-gray-900">
+            pacientesFiltrados.map((paciente) => (
+              <button
+                key={paciente.id}
+                type="button"
+                onClick={() => handleSeleccionarPaciente(paciente)}
+                disabled={seleccionandoId === paciente.id}
+                className="w-full rounded-2xl bg-white border border-gray-200 shadow-sm p-4 text-left transition hover:bg-gray-50 disabled:opacity-60"
+              >
+                <div className="flex flex-col gap-3">
+                  <div className="text-lg font-semibold text-gray-950">
                     {paciente.nombre} {paciente.apellido}
                   </div>
 
-                  <div className="flex flex-wrap gap-x-6 gap-y-1 text-sm text-gray-600">
+                  <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-gray-600">
                     <span>
-                      <strong>Tel:</strong> {paciente.telefono?.trim() || "—"}
+                      <span className="text-gray-500">Tel:</span> {paciente.telefono?.trim() || "—"}
                     </span>
                     <span>
-                      <strong>F. nac.:</strong> {paciente.fecha_nacimiento || "—"}
+                      <span className="text-gray-500">F. nac.:</span> {paciente.fecha_nacimiento || "—"}
                     </span>
                   </div>
 
@@ -241,12 +233,12 @@ export default function SeleccionarPacientePageClient() {
                       ? "Asignando..."
                       : "Asignar a nueva consulta"}
                   </div>
-                </button>
-              ))}
-            </div>
+                </div>
+              </button>
+            ))
           )}
-        </div>
-      </main>
-    </div>
+        </section>
+      </div>
+    </main>
   );
 }

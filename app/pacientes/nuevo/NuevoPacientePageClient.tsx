@@ -126,16 +126,16 @@ export default function NuevoPacientePageClient() {
 
   if (!authChecked) {
     return (
-      <main className="min-h-screen bg-gray-100 p-8">
-        <div className="mx-auto max-w-3xl rounded-2xl bg-white p-6 shadow-sm">
-          <p className="text-gray-600">Verificando sesión...</p>
+      <main className="min-h-screen bg-[#f8fafc] px-4 py-6 sm:p-6 lg:p-8">
+        <div className="mx-auto max-w-4xl rounded-2xl bg-white p-4 sm:p-6 shadow-sm">
+          <p className="text-base text-gray-600">Verificando sesión...</p>
         </div>
       </main>
     );
   }
 
   return (
-    <>
+    <main className="min-h-screen bg-[#f8fafc] px-4 py-6 sm:p-6 lg:p-8">
       <AppHeader
         titulo="Nuevo paciente"
         subtitulo="Registrar nuevo paciente"
@@ -155,7 +155,7 @@ export default function NuevoPacientePageClient() {
 
             <Link
               href="/dashboard"
-              className="inline-flex items-center rounded-xl border border-blue-300 bg-blue-50 px-4 py-2 text-sm font-semibold text-blue-700 hover:bg-blue-100 transition"
+              className="inline-flex items-center rounded-xl border border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-50 transition"
             >
               Ir a pacientes
             </Link>
@@ -163,101 +163,99 @@ export default function NuevoPacientePageClient() {
         }
       />
 
-      <main className="min-h-screen bg-gray-100 p-8">
-        <div className="mx-auto max-w-3xl">
-          <section className="rounded-2xl bg-white p-6 shadow-sm">
-            <form className="space-y-5" onSubmit={handleSubmit}>
-              <div>
-                <label className="mb-2 block text-sm font-medium text-gray-700">
-                  Nombre
-                </label>
-                <input
-                  type="text"
-                  value={nombre}
-                  onChange={(e) => setNombre(e.target.value)}
-                  className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none"
-                  placeholder="Ej. Ana"
-                  required
-                />
-              </div>
+      <div className="mx-auto max-w-4xl">
+        <section className="rounded-2xl bg-white border border-gray-200 shadow-sm p-4 sm:p-6">
+          <form className="space-y-5" onSubmit={handleSubmit}>
+            <div>
+              <label className="mb-2 block text-sm font-medium text-gray-700">
+                Nombre
+              </label>
+              <input
+                type="text"
+                value={nombre}
+                onChange={(e) => setNombre(e.target.value)}
+                className="w-full rounded-xl border border-gray-300 px-4 py-3 text-base outline-none transition focus:border-blue-500"
+                placeholder="Ej. Ana"
+                required
+              />
+            </div>
 
-              <div>
-                <label className="mb-2 block text-sm font-medium text-gray-700">
-                  Apellido
-                </label>
-                <input
-                  type="text"
-                  value={apellido}
-                  onChange={(e) => setApellido(e.target.value)}
-                  className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none"
-                  placeholder="Ej. López"
-                  required
-                />
-              </div>
+            <div>
+              <label className="mb-2 block text-sm font-medium text-gray-700">
+                Apellido
+              </label>
+              <input
+                type="text"
+                value={apellido}
+                onChange={(e) => setApellido(e.target.value)}
+                className="w-full rounded-xl border border-gray-300 px-4 py-3 text-base outline-none transition focus:border-blue-500"
+                placeholder="Ej. López"
+                required
+              />
+            </div>
 
-              <div>
-                <label className="mb-2 block text-sm font-medium text-gray-700">
-                  Fecha de nacimiento
-                </label>
-                <input
-                  type="date"
-                  value={fechaNacimiento}
-                  onChange={(e) => setFechaNacimiento(e.target.value)}
-                  className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none"
-                />
-              </div>
+            <div>
+              <label className="mb-2 block text-sm font-medium text-gray-700">
+                Fecha de nacimiento
+              </label>
+              <input
+                type="date"
+                value={fechaNacimiento}
+                onChange={(e) => setFechaNacimiento(e.target.value)}
+                className="w-full rounded-xl border border-gray-300 px-4 py-3 text-base outline-none transition focus:border-blue-500"
+              />
+            </div>
 
-              <div>
-                <label className="mb-2 block text-sm font-medium text-gray-700">
-                  Teléfono
-                </label>
-                <input
-                  type="text"
-                  value={telefono}
-                  onChange={(e) => setTelefono(e.target.value)}
-                  className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none"
-                  placeholder="Ej. 600111222"
-                />
-              </div>
+            <div>
+              <label className="mb-2 block text-sm font-medium text-gray-700">
+                Teléfono
+              </label>
+              <input
+                type="text"
+                value={telefono}
+                onChange={(e) => setTelefono(e.target.value)}
+                className="w-full rounded-xl border border-gray-300 px-4 py-3 text-base outline-none transition focus:border-blue-500"
+                placeholder="Ej. 600111222"
+              />
+            </div>
 
-              <div>
-                <label className="mb-2 block text-sm font-medium text-gray-700">
-                  Observaciones
-                </label>
-                <textarea
-                  value={observaciones}
-                  onChange={(e) => setObservaciones(e.target.value)}
-                  className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none"
-                  rows={4}
-                  placeholder="Observaciones clínicas o generales"
-                />
-              </div>
+            <div>
+              <label className="mb-2 block text-sm font-medium text-gray-700">
+                Observaciones
+              </label>
+              <textarea
+                value={observaciones}
+                onChange={(e) => setObservaciones(e.target.value)}
+                className="w-full rounded-xl border border-gray-300 px-4 py-3 text-sm outline-none transition focus:border-blue-500 resize-none"
+                rows={4}
+                placeholder="Observaciones clínicas o generales"
+              />
+            </div>
 
-              <div className="flex justify-end">
-                <button
-                  type="submit"
-                  disabled={guardando}
-                  className="rounded-xl bg-black px-5 py-3 text-white disabled:opacity-60"
-                >
-                  {guardando ? "Guardando..." : "Guardar paciente"}
-                </button>
-              </div>
-            </form>
-
-            {mensaje && (
-              <div
-                className={`mt-6 rounded-xl px-4 py-3 ${
-                  tipoMensaje === "ok"
-                    ? "border border-green-300 bg-green-50 text-green-800"
-                    : "border border-red-300 bg-red-50 text-red-800"
-                }`}
+            <div className="flex justify-end">
+              <button
+                type="submit"
+                disabled={guardando}
+                className="w-full sm:w-auto rounded-xl bg-blue-600 px-5 py-3 text-base font-medium text-white disabled:opacity-60"
               >
-                {mensaje}
-              </div>
-            )}
-          </section>
-        </div>
-      </main>
-    </>
+                {guardando ? "Guardando..." : "Guardar paciente"}
+              </button>
+            </div>
+          </form>
+
+          {mensaje && (
+            <div
+              className={`mt-6 rounded-xl px-4 py-3 text-sm ${
+                tipoMensaje === "ok"
+                  ? "border border-green-300 bg-green-50 text-green-800"
+                  : "border border-red-300 bg-red-50 text-red-800"
+              }`}
+            >
+              {mensaje}
+            </div>
+          )}
+        </section>
+      </div>
+    </main>
   );
 }

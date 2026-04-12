@@ -438,6 +438,12 @@ export default function NuevaConsultaPageClient() {
       return;
     }
 
+    if (!motivoConsulta.trim()) {
+      setTipoMensaje("error");
+      setMensaje("Debes indicar el motivo de consulta.");
+      return;
+    }
+
     setGuardando(true);
     setMensaje("");
     setTipoMensaje(null);
@@ -515,7 +521,8 @@ export default function NuevaConsultaPageClient() {
           return;
         }
 
-        const extension = audioFile.name.split(".").pop()?.toLowerCase() || "webm";
+        const extension =
+          audioFile.name.split(".").pop()?.toLowerCase() || "webm";
         const filePath = `${profile.id}/${consultaId}.${extension}`;
 
         const { error: uploadError } = await supabase.storage
@@ -588,93 +595,102 @@ export default function NuevaConsultaPageClient() {
   }
 
   if (!authChecked) {
-    return (
-      <main className="min-h-screen bg-gray-100 p-8">
-        <div className="mx-auto max-w-4xl rounded-2xl bg-white p-6 shadow-sm">
-          <p className="text-gray-600">Verificando sesión...</p>
-        </div>
-      </main>
-    );
-  }
+  return (
+    <main className="min-h-screen bg-[#f8fafc] px-4 py-6 sm:p-6 lg:p-8">
+     <div className="w-full max-w-none bg-white p-4 sm:p-6 shadow-sm">
+        <p className="text-base text-gray-600">Verificando sesión...</p>
+      </div>
+    </main>
+  );
+}
 
   return (
-    <main className="min-h-screen bg-gray-100 p-8">
-      <AppHeader
-        titulo="Nueva consulta"
-        subtitulo="Busca o crea un paciente antes de registrar el audio de la consulta."
-        nombreProfesional={userProfile?.nombre_profesional || undefined}
-        nombreUsuario={userProfile?.nombre || undefined}
-        rol={userProfile?.rol}
-        acciones={
-          <a
-            href="/dashboard"
-            className="inline-flex items-center rounded-xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow hover:bg-blue-700 transition"
+  <main className="relative min-h-screen">
+    <div
+      className="absolute inset-x-0 bottom-0 -z-10 h-[25%]"
+      style={{
+        backgroundImage: "url('/premium-medical-soft.png')",
+        backgroundSize: "cover",
+        backgroundPosition: "center bottom",
+        backgroundRepeat: "no-repeat",
+      }}
+    />
+  <div className="absolute inset-x-0 bottom-0 -z-10 h-[25%] bg-gradient-to-t from-transparent via-white/25 to-white" />
+
+    <AppHeader
+      titulo="Nueva consulta"
+      subtitulo="Asigna un paciente antes de registrar el borrador clínico."
+      nombreProfesional={userProfile?.nombre_profesional || undefined}
+      nombreUsuario={userProfile?.nombre || undefined}
+      rol={userProfile?.rol}
+      acciones={
+        <a
+          href="/dashboard"
+          className="inline-flex items-center rounded-2xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow transition hover:bg-blue-700"
+        >
+          <span className="hidden sm:inline">Ir al panel</span>
+          <span className="sm:hidden">Mis pacientes</span>
+        </a>
+      }
+    />
+
+    <div className="mx-auto -mt-10 max-w-4xl px-4 pb-6 sm:px-6 sm:pb-6 lg:px-8 lg:pb-8">
+  <section className="relative pt-0 pb-6 sm:pb-6">
+    <div className="relative z-10 -mt-8 mb-6 rounded-[28px] border border-white/60 bg-white/95 p-4 shadow-[0_20px_50px_rgba(15,47,122,0.12)] backdrop-blur-sm">
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+        <div className="min-w-0 flex-1">
+          <p className="mb-1 text-sm text-gray-500">Paciente</p>
+
+          {paciente ? (
+            <>
+              <p className="truncate text-lg font-semibold text-gray-950">
+                {paciente.nombre} {paciente.apellido}
+              </p>
+              <p className="mt-1 text-sm text-blue-700">
+                Paciente asignado para esta nueva consulta.
+              </p>
+            </>
+          ) : (
+            <p className="text-sm text-gray-600">
+              Busca paciente o registra uno nuevo.
+            </p>
+          )}
+        </div>
+
+        <div className="mt-2 flex flex-col gap-2 sm:mt-0 sm:flex-row sm:gap-3">
+          <button
+            type="button"
+            onClick={() => {
+              setMostrarBuscadorPacientes((prev) => !prev);
+
+              if (!mostrarBuscadorPacientes && prefillBusqueda.trim()) {
+                setTextoBusquedaPaciente(prefillBusqueda);
+              }
+            }}
+            className="w-full rounded-xl bg-blue-600 px-4 py-3 text-base font-semibold text-white hover:bg-blue-700"
           >
-            Ir a pacientes
-          </a>
-        }
-      />
+            <span className="block sm:hidden">Buscar</span>
+            <span className="hidden sm:block">Buscar paciente</span>
+          </button>
 
-      <div className="mx-auto max-w-4xl">
-        <section className="rounded-2xl bg-white p-6 shadow-sm">
-          <div className="mb-6 rounded-2xl border border-gray-200 bg-gray-50 p-4">
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-              <div>
-                <p className="text-sm text-gray-500">Paciente</p>
-
-                {paciente ? (
-                  <>
-                    <p className="text-lg font-semibold text-gray-950">
-                      {paciente.nombre} {paciente.apellido}
-                    </p>
-                    <p className="mt-1 text-sm text-green-600">
-                      Paciente asignado para esta nueva consulta.
-                    </p>
-                  </>
-                ) : (
-                  <>
-                    <p className="text-lg font-semibold text-red-600">
-                      No asignado
-                    </p>
-                    <p className="mt-1 text-sm text-gray-500">
-                      Primero usa Buscar paciente o Nuevo paciente para continuar.
-                    </p>
-                  </>
-                )}
-              </div>
-
-              <div className="mt-4 flex flex-wrap gap-3">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setMostrarBuscadorPacientes((prev) => !prev);
-
-                    if (!mostrarBuscadorPacientes && prefillBusqueda.trim()) {
-                      setTextoBusquedaPaciente(prefillBusqueda);
-                    }
-                  }}
-                  className="rounded-xl bg-black px-4 py-2.5 text-sm font-semibold text-white hover:bg-gray-800"
-                >
-                  Buscar paciente
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => {
-                    const query = new URLSearchParams();
-                    query.set("returnTo", "/nueva-consulta");
-                    router.push(`/pacientes/nuevo?${query.toString()}`);
-                  }}
-                  className="rounded-xl bg-black px-5 py-3 text-sm font-semibold text-white hover:bg-gray-800"
-                >
-                  Nuevo paciente
-                </button>
-              </div>
-            </div>
-          </div>
+          <button
+            type="button"
+            onClick={() => {
+              const query = new URLSearchParams();
+              query.set("returnTo", "/nueva-consulta");
+              router.push(`/pacientes/nuevo?${query.toString()}`);
+            }}
+            className="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm font-semibold text-gray-700 hover:bg-gray-50"
+          >
+            <span className="block sm:hidden">Nuevo</span>
+            <span className="hidden sm:block">Nuevo paciente</span>
+          </button>
+        </div>
+      </div>
+    </div>
 
           {mostrarBuscadorPacientes && (
-            <div className="mb-6 rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
+            <div className="mb-6 rounded-2xl border border-gray-200 bg-white p-3 shadow-sm sm:p-4">
               <div className="space-y-4">
                 <div>
                   <label
@@ -690,7 +706,7 @@ export default function NuevaConsultaPageClient() {
                     value={textoBusquedaPaciente}
                     onChange={(e) => setTextoBusquedaPaciente(e.target.value)}
                     placeholder="Escribe nombre o apellido..."
-                    className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none focus:border-gray-500"
+                    className="w-full rounded-xl border border-gray-300 px-3 py-2.5 text-sm outline-none focus:border-gray-500"
                   />
                 </div>
 
@@ -713,10 +729,9 @@ export default function NuevaConsultaPageClient() {
                             nombre: resultado.nombre,
                             apellido: resultado.apellido,
                           });
-
                           setMostrarBuscadorPacientes(false);
                         }}
-                        className="w-full rounded-xl border border-gray-200 px-4 py-3 text-left hover:bg-gray-50"
+                        className="w-full rounded-xl border border-gray-200 px-3 py-2.5 text-left text-sm hover:bg-gray-50"
                       >
                         <span className="block font-medium text-gray-900">
                           {resultado.nombre} {resultado.apellido}
@@ -729,100 +744,134 @@ export default function NuevaConsultaPageClient() {
             </div>
           )}
 
-          <form className="space-y-5" onSubmit={handleSubmit}>
+       <form className="space-y-4" onSubmit={handleSubmit}>
             <div>
               <label className="mb-2 block text-sm font-medium text-gray-700">
-                Motivo de consulta (obligatorio)
+                Motivo consulta
               </label>
 
               <textarea
                 value={motivoConsulta}
                 onChange={(e) => setMotivoConsulta(e.target.value)}
-                className="w-full rounded-xl border border-gray-300 px-4 py-3 outline-none"
-                rows={5}
-                placeholder={
-                  pacienteAsignado
-                    ? "Ej: Dolor abdominal desde hace 3 días, sin fiebre..."
-                    : "Primero debes buscar y asignar un paciente."
-                }
+                className="w-full rounded-xl border border-gray-300 px-3 py-2 text-sm outline-none resize-none"
+                rows={2}
+                required
+                placeholder="Ej: Cefalea, ansiedad, dolor abdominal..."
                 disabled={!pacienteAsignado}
               />
+              {!pacienteAsignado && (
+                <p className="mt-2 text-sm text-gray-500">
+                  
+                </p>
+              )}
             </div>
 
-            <div className="rounded-2xl border border-gray-200 bg-gray-50 p-5">
-              <div className="mb-4">
+          <div className="relative -mt-4 overflow-hidden rounded-2xl border border-blue-200 bg-blue-50 shadow-sm p-5">
+  <div
+    className="absolute inset-0 opacity-25"
+    style={{
+      backgroundImage: "url('/premium-medical-soft.png')",
+      backgroundSize: "120% auto",
+      backgroundPosition: "right bottom",
+      backgroundRepeat: "no-repeat",
+    }}
+  />
+  <div className="absolute inset-0 bg-white/10" />
+  <div className="relative z-10">
+
+              <div className="mb-4 text-center">
                 <label className="block text-sm font-semibold text-gray-800">
-                  Audio de consulta (opcional)
+                Registrar audio
                 </label>
               </div>
 
               <div className="space-y-4">
-                <div className="flex flex-wrap items-center justify-center gap-3">
+                <div className="flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center">
                   <input
                     ref={audioInputRef}
                     id="audioFile"
                     type="file"
                     accept=".mp3,.wav,.m4a,.webm,audio/*"
                     className="hidden"
-                    disabled={!pacienteAsignado}
                     onChange={(e) => {
+                      if (!pacienteAsignado) {
+                        setTipoMensaje("error");
+                        setMensaje("Asigna un paciente antes de subir o grabar audio.");
+                        if (audioInputRef.current) {
+                          audioInputRef.current.value = "";
+                        }
+                        return;
+                      }
+
                       const file = e.target.files?.[0] || null;
                       setAudioFile(file);
                     }}
                   />
 
-                  <label
-                    htmlFor="audioFile"
-                    onClick={(e) => {
-                      if (!pacienteAsignado) e.preventDefault();
-                    }}
-                    className={`inline-flex items-center rounded-xl px-4 py-2 ${
-                      !pacienteAsignado
-                        ? "cursor-not-allowed bg-gray-300 text-gray-500"
-                        : audioFile
-                        ? "cursor-pointer bg-green-600 text-white hover:bg-green-700"
-                        : "cursor-pointer bg-black text-white hover:bg-gray-800"
-                    }`}
-                  >
-                    {audioFile ? "Reemplazar audio" : "Subir archivo"}
-                  </label>
-
-                  <span className="min-w-[220px] text-center text-sm text-gray-600">
-                    {audioFile ? audioFile.name : "Ningún archivo seleccionado"}
-                  </span>
-
                   <button
                     type="button"
-                    onClick={handleToggleGrabacion}
-                    disabled={!pacienteAsignado || (!grabando && !!audioFile)}
-                    className={`inline-flex items-center rounded-xl px-5 py-2 font-semibold ${
+                    onClick={() => {
+                      if (!pacienteAsignado) {
+                        setTipoMensaje("error");
+                        setMensaje("Asigna un paciente antes de subir o grabar audio.");
+                        return;
+                      }
+
+                      handleToggleGrabacion();
+                    }}
+                    disabled={!grabando && !!audioFile}
+                    className={`inline-flex w-full items-center justify-center rounded-xl px-4 py-3 text-sm font-semibold sm:w-auto ${
                       grabando
                         ? "bg-red-600 text-white hover:bg-red-700"
                         : audioFile
                         ? "cursor-not-allowed bg-gray-200 text-gray-400"
-                        : pacienteAsignado
-                        ? "bg-red-600 text-white hover:bg-red-700"
-                        : "cursor-not-allowed bg-gray-200 text-gray-400"
+                        : "bg-blue-600 text-white hover:bg-blue-700"
                     }`}
                   >
-                    {grabando ? "DETENER" : "GRABAR"}
+                    {grabando ? "Detener" : "Grabar"}
                   </button>
+
+                  <label
+                    htmlFor="audioFile"
+                    onClick={(e) => {
+                      if (!pacienteAsignado) {
+                        e.preventDefault();
+                        setTipoMensaje("error");
+                        setMensaje("Asigna un paciente antes de subir o grabar audio.");
+                      }
+                    }}
+                    className={`inline-flex w-full items-center justify-center rounded-xl px-4 py-3 text-sm font-semibold sm:w-auto ${
+                      audioFile
+                      ? "cursor-pointer border border-blue-300 bg-white text-blue-700 hover:bg-blue-50"
+                        : "cursor-pointer border border-gray-300 bg-white text-gray-700 hover:bg-gray-50"
+                    }`}
+                  >
+                    {audioFile ? "Reemplazar archivo" : "Subir archivo"}
+                  </label>
+
+                  <span className="min-w-0 flex-1 truncate px-2 text-center text-sm text-gray-600">
+                    {audioFile ? audioFile.name : "Ningún archivo seleccionado"}
+                  </span>
+                  {!pacienteAsignado && (
+                    <p className="w-full text-center text-sm text-gray-500">
+                    
+                    </p>
+                  )}
                 </div>
 
-                <div className="space-y-10">
+                <div className="space-y-6">
                   {!audioFile && (
-                    <p className="text-sm text-gray-500">
-                      Puedes subir un archivo de audio o grabarlo directamente
-                      desde la app para usarlo luego en la transcripción.
+                   <p className="text-sm text-blue-700">
+                      Sube un archivo o grabalo directamente.
                     </p>
                   )}
 
                   {audioFile && !grabando && (
-                    <div className="mt-3 flex justify-center">
+                    <div className="flex justify-center">
                       <button
                         type="button"
                         onClick={handleQuitarAudio}
-                        className="rounded-lg border border-gray-300 px-3 py-1 text-sm text-gray-700 hover:bg-gray-50"
+                        className="rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50"
                       >
                         Quitar audio
                       </button>
@@ -837,21 +886,21 @@ export default function NuevaConsultaPageClient() {
                   )}
 
                   {grabando && (
-                    <div className="space-y-3 rounded-xl border border-red-200 bg-red-50 px-3 py-3 text-sm text-red-700">
+                    <div className="space-y-3 rounded-xl border border-red-200 bg-red-50 px-4 py-4 text-sm text-red-700">
                       <div className="flex flex-wrap items-center gap-3">
-                        <span className="h-2.5 w-2.5 rounded-full bg-red-600" />
+                        <span className="h-2 w-2 rounded-full bg-red-600" />
                         <span className="font-medium">Grabando audio...</span>
 
-                        <span className="rounded-md bg-white/70 px-2 py-0.5 font-mono text-sm text-red-700">
+                        <span className="rounded-md bg-white/70 px-3 py-1 font-mono text-sm text-red-700">
                           {formatearTiempo(segundosGrabacion)}
                         </span>
 
-                        <span className="text-red-600/80">
-                          Pulsa “DETENER” para finalizar la grabación.
+                        <span className="text-sm text-red-600/80">
+                          Pulsa "DETENER" para finalizar.
                         </span>
                       </div>
 
-                      <div className="flex items-end gap-1.5">
+                      <div className="flex items-end justify-center gap-1.5">
                         {barrasVumetro.map((activa, index) => (
                           <span
                             key={index}
@@ -869,7 +918,7 @@ export default function NuevaConsultaPageClient() {
                   )}
                 </div>
 
-                {audioPreviewUrl && !grabando && (
+                               {audioPreviewUrl && !grabando && (
                   <div className="rounded-xl border border-gray-200 bg-white p-3">
                     <p className="mb-2 text-sm font-medium text-gray-700">
                       Vista previa del audio
@@ -887,21 +936,24 @@ export default function NuevaConsultaPageClient() {
                 )}
               </div>
             </div>
+          </div>
 
-            <div className="flex justify-end">
-              <button
-                type="submit"
-                disabled={!pacienteAsignado || guardando}
-                className="rounded-xl bg-blue-600 px-5 py-3 text-white disabled:opacity-60"
-              >
-                {guardando ? "Guardando..." : "Guardar y generar borrador"}
-              </button>
-            </div>
+            <div className="mt-8 rounded-2xl bg-white p-3 shadow-sm">
+  <div className="flex justify-end">
+    <button
+      type="submit"
+      disabled={!pacienteAsignado || guardando}
+      className="w-full rounded-xl bg-blue-600 px-5 py-3 text-base font-medium text-white disabled:opacity-60"
+    >
+      {guardando ? "Guardando..." : "Guardar y generar borrador"}
+    </button>
+  </div>
+</div>
           </form>
 
           {mensaje && (
             <div
-              className={`mt-6 rounded-xl px-4 py-3 ${
+              className={`mt-8 rounded-xl px-4 py-3 text-sm ${
                 tipoMensaje === "ok"
                   ? "border border-green-300 bg-green-50 text-green-800"
                   : "border border-red-300 bg-red-50 text-red-800"
