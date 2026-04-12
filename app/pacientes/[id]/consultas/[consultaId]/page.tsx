@@ -529,7 +529,7 @@ export default function ConsultaPage() {
   }
 
   return (
-    <main className="min-h-screen bg-[#f8fafc] px-4 py-6 sm:p-6 lg:p-8">
+    <main className="relative isolate min-h-screen bg-[#f8fafc] px-4 py-6 sm:p-6 lg:p-8">
       <AppHeader
         titulo="Detalle de la consulta"
         subtitulo="Transcripción-borrador clínico"
@@ -537,19 +537,36 @@ export default function ConsultaPage() {
         nombreProfesional={userProfile?.nombre_profesional || undefined}
         nombreUsuario={userProfile?.nombre || undefined}
         rol={userProfile?.rol}
-        backHref={`/pacientes/${pacienteId}`}
-        backLabel="Volver a la ficha"
         acciones={
-          <Link
-            href={`/pacientes/${pacienteId}/consultas/${consultaId}/pdf`}
-            className="inline-block rounded-xl bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
-          >
-            Generar PDF
-          </Link>
+          <div className="flex gap-2">
+            <Link
+              href={`/pacientes/${pacienteId}/consultas/${consultaId}/pdf`}
+              className="inline-block rounded-xl bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
+            >
+              Generar PDF
+            </Link>
+            <Link
+              href={`/nueva-consulta?pacienteId=${pacienteId}`}
+              className="inline-block rounded-xl bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
+            >
+              Nueva consulta
+            </Link>
+          </div>
         }
       />
 
-      <div className="mx-auto max-w-4xl space-y-6">
+      <div
+        className="pointer-events-none fixed inset-x-0 bottom-0 z-0 h-[28vh]"
+        style={{
+          backgroundImage: "url('/premium-medical-soft.png')",
+          backgroundSize: "cover",
+          backgroundPosition: "center bottom",
+          backgroundRepeat: "no-repeat",
+        }}
+      />
+      <div className="pointer-events-none fixed inset-x-0 bottom-0 z-0 h-[28vh] bg-gradient-to-t from-transparent via-white/25 to-white" />
+
+      <div className="relative z-10 mx-auto max-w-4xl space-y-6">
         <section className="rounded-2xl bg-white border border-gray-200 shadow-sm p-4 sm:p-6">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>

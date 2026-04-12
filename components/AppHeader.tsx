@@ -46,8 +46,7 @@ export default function AppHeader({
         />
 
         <div className="absolute inset-0 bg-gradient-to-r from-[#0f2f7a]/78 via-[#2563eb]/26 to-transparent" />
-        <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-b from-transparent via-white/20 to-[#f8fafc]" />
-        <div className="absolute inset-x-0 bottom-0 h-10 rounded-t-[100%] bg-white/8 blur-2xl" />
+        <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-b from-transparent via-white/18 to-[#f8fafc]" />
 
         <div className="relative w-full px-4 pb-14 pt-6 sm:px-6 sm:pb-16 sm:pt-8">
           <div className="mt-6 max-w-[180px] sm:max-w-[270px]">
@@ -79,8 +78,8 @@ export default function AppHeader({
             ) : null}
           </div>
 
-          <div className="mt-6 flex justify-end gap-2">
-            {acciones ? <div className="shrink-0">{acciones}</div> : null}
+          <div className="mt-6 flex flex-wrap items-center justify-start gap-2 sm:justify-end">
+            {acciones ? <div className="min-w-0 flex items-center gap-2">{acciones}</div> : null}
 
             <button
               onClick={handleLogout}
@@ -91,8 +90,6 @@ export default function AppHeader({
             </button>
           </div>
         </div>
-
-        <div className="absolute inset-x-0 bottom-0 h-12 bg-gradient-to-b from-transparent via-white/35 to-[#f8fafc]" />
       </div>
     </header>
   );

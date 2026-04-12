@@ -1,0 +1,76 @@
+[1mdiff --git a/app/dashboard/page.tsx b/app/dashboard/page.tsx[m
+[1mindex bfb0c2a..fea023c 100644[m
+[1m--- a/app/dashboard/page.tsx[m
+[1m+++ b/app/dashboard/page.tsx[m
+[36m@@ -127,7 +127,18 @@[m [mif (userError || !user) {[m
+   });[m
+ [m
+   return ([m
+[31m-    <main className="min-h-screen bg-gray-100 p-8">[m
+[32m+[m[32m    <main className="relative min-h-screen">[m
+[32m+[m[32m      <div[m
+[32m+[m[32m        className="absolute inset-x-0 bottom-0 -z-10 h-[25%]"[m
+[32m+[m[32m        style={{[m
+[32m+[m[32m          backgroundImage: "url('/premium-medical-soft.png')",[m
+[32m+[m[32m          backgroundSize: "cover",[m
+[32m+[m[32m          backgroundPosition: "center bottom",[m
+[32m+[m[32m          backgroundRepeat: "no-repeat",[m
+[32m+[m[32m        }}[m
+[32m+[m[32m      />[m
+[32m+[m[32m      <div className="absolute inset-x-0 bottom-0 -z-10 h-[25%] bg-gradient-to-t from-transparent via-white/25 to-white" />[m
+[32m+[m
+       <AppHeader[m
+         titulo="Panel de pacientes"[m
+         subtitulo="Gestión clínica"[m
+[36m@@ -153,17 +164,19 @@[m [mif (userError || !user) {[m
+         }[m
+       />[m
+ [m
+[31m-      <div className="mx-auto max-w-5xl">[m
+[31m-        <section className="mb-6 rounded-2xl bg-white p-4 shadow-sm">[m
+[31m-          <div className="flex flex-col gap-4 md:flex-row md:items-center">[m
+[31m-            <div className="flex-1">[m
+[31m-              <input[m
+[31m-                type="text"[m
+[31m-                value={busqueda}[m
+[31m-                onChange={(e) => setBusqueda(e.target.value)}[m
+[31m-                placeholder="Buscar por nombre o apellido"[m
+[31m-                className="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-gray-900 outline-none placeholder:text-gray-400 focus:border-gray-400"[m
+[31m-              />[m
+[32m+[m[32m      <div className="mx-auto -mt-8 max-w-5xl px-4 pb-6 sm:px-6 sm:pb-6 lg:px-8 lg:pb-8">[m
+[32m+[m[32m        <section className="relative pt-0 pb-6 sm:pb-6">[m
+[32m+[m[32m          <div className="relative z-10 -mt-6 mb-6 rounded-[28px] border border-white/60 bg-white/95 p-4 shadow-[0_20px_50px_rgba(15,47,122,0.12)] backdrop-blur-sm">[m
+[32m+[m[32m            <div className="flex flex-col gap-4 md:flex-row md:items-center">[m
+[32m+[m[32m              <div className="flex-1">[m
+[32m+[m[32m                <input[m
+[32m+[m[32m                  type="text"[m
+[32m+[m[32m                  value={busqueda}[m
+[32m+[m[32m                  onChange={(e) => setBusqueda(e.target.value)}[m
+[32m+[m[32m                  placeholder="Buscar por nombre o apellido"[m
+[32m+[m[32m                  className="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-gray-900 outline-none placeholder:text-gray-400 focus:border-gray-400"[m
+[32m+[m[32m                />[m
+[32m+[m[32m              </div>[m
+             </div>[m
+ [m
+             <div className="shrink-0 text-sm text-gray-500 md:text-right">[m
+[1mdiff --git a/app/pacientes/[id]/consultas/[consultaId]/pdf/page.tsx b/app/pacientes/[id]/consultas/[consultaId]/pdf/page.tsx[m
+[1mindex 181c76d..6e868af 100644[m
+[1m--- a/app/pacientes/[id]/consultas/[consultaId]/pdf/page.tsx[m
+[1m+++ b/app/pacientes/[id]/consultas/[consultaId]/pdf/page.tsx[m
+[36m@@ -247,14 +247,14 @@[m [mexport default function ConsultaPdfPage() {[m
+ [m
+           <Link[m
+             href={`/pacientes/${id}/consultas/${consultaId}`}[m
+[31m-            className="inline-block rounded-xl border border-gray-300 px-4 py-2 text-gray-800"[m
+[32m+[m[32m            className="inline-block rounded-xl bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"[m
+           >[m
+             Volver a consulta[m
+           </Link>[m
+ [m
+           <Link[m
+             href="/dashboard"[m
+[31m-            className="inline-block rounded-xl border border-gray-300 px-4 py-2 text-gray-800"[m
+[32m+[m[32m            className="inline-block rounded-xl bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"[m
+           >[m
+             Volver al panel de pacientes[m
+           </Link>[m

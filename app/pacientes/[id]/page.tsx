@@ -182,7 +182,7 @@ export default function PacientePage() {
   }
 
   return (
-    <main className="min-h-screen bg-[#f8fafc] px-4 py-6 sm:p-6 lg:p-8">
+    <main className="relative isolate min-h-screen bg-[#f8fafc] px-4 py-6 sm:p-6 lg:p-8">
       <AppHeader
         titulo="Ficha del paciente"
         subtitulo="Detalle del paciente y consultas"
@@ -200,7 +200,18 @@ export default function PacientePage() {
         }
       />
 
-      <div className="mx-auto max-w-4xl">
+      <div
+        className="pointer-events-none fixed inset-x-0 bottom-0 z-0 h-[28vh]"
+        style={{
+          backgroundImage: "url('/premium-medical-soft.png')",
+          backgroundSize: "cover",
+          backgroundPosition: "center bottom",
+          backgroundRepeat: "no-repeat",
+        }}
+      />
+      <div className="pointer-events-none fixed inset-x-0 bottom-0 z-0 h-[28vh] bg-gradient-to-t from-transparent via-white/25 to-white" />
+
+      <div className="relative z-10 mx-auto max-w-4xl">
         <section className="mb-6 rounded-2xl bg-white border border-gray-200 shadow-sm p-4 sm:p-6">
           <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <div>

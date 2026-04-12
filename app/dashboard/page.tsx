@@ -127,7 +127,18 @@ if (userError || !user) {
   });
 
   return (
-    <main className="min-h-screen bg-gray-100 p-8">
+    <main className="relative min-h-screen">
+      <div
+        className="absolute inset-x-0 bottom-0 -z-10 h-[25%]"
+        style={{
+          backgroundImage: "url('/premium-medical-soft.png')",
+          backgroundSize: "cover",
+          backgroundPosition: "center bottom",
+          backgroundRepeat: "no-repeat",
+        }}
+      />
+      <div className="absolute inset-x-0 bottom-0 -z-10 h-[25%] bg-gradient-to-t from-transparent via-white/25 to-white" />
+
       <AppHeader
         titulo="Panel de pacientes"
         subtitulo="Gestión clínica"
@@ -153,17 +164,19 @@ if (userError || !user) {
         }
       />
 
-      <div className="mx-auto max-w-5xl">
-        <section className="mb-6 rounded-2xl bg-white p-4 shadow-sm">
-          <div className="flex flex-col gap-4 md:flex-row md:items-center">
-            <div className="flex-1">
-              <input
-                type="text"
-                value={busqueda}
-                onChange={(e) => setBusqueda(e.target.value)}
-                placeholder="Buscar por nombre o apellido"
-                className="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-gray-900 outline-none placeholder:text-gray-400 focus:border-gray-400"
-              />
+      <div className="mx-auto -mt-8 max-w-5xl px-4 pb-6 sm:px-6 sm:pb-6 lg:px-8 lg:pb-8">
+        <section className="relative pt-0 pb-6 sm:pb-6">
+          <div className="relative z-10 -mt-6 mb-6 rounded-[28px] border border-white/60 bg-white/95 p-4 shadow-[0_20px_50px_rgba(15,47,122,0.12)] backdrop-blur-sm">
+            <div className="flex flex-col gap-4 md:flex-row md:items-center">
+              <div className="flex-1">
+                <input
+                  type="text"
+                  value={busqueda}
+                  onChange={(e) => setBusqueda(e.target.value)}
+                  placeholder="Buscar por nombre o apellido"
+                  className="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-gray-900 outline-none placeholder:text-gray-400 focus:border-gray-400"
+                />
+              </div>
             </div>
 
             <div className="shrink-0 text-sm text-gray-500 md:text-right">

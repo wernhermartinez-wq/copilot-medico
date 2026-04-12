@@ -247,14 +247,14 @@ export default function ConsultaPdfPage() {
 
           <Link
             href={`/pacientes/${id}/consultas/${consultaId}`}
-            className="inline-block rounded-xl border border-gray-300 px-4 py-2 text-gray-800"
+            className="inline-block rounded-xl bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
           >
             Volver a consulta
           </Link>
 
           <Link
             href="/dashboard"
-            className="inline-block rounded-xl border border-gray-300 px-4 py-2 text-gray-800"
+            className="inline-block rounded-xl bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
           >
             Volver al panel de pacientes
           </Link>

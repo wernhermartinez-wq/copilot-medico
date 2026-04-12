@@ -626,7 +626,7 @@ export default function NuevaConsultaPageClient() {
       acciones={
         <a
           href="/dashboard"
-          className="inline-flex items-center rounded-2xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow transition hover:bg-blue-700"
+          className="inline-flex items-center rounded-xl border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition"
         >
           <span className="hidden sm:inline">Ir al panel</span>
           <span className="sm:hidden">Mis pacientes</span>
@@ -634,29 +634,30 @@ export default function NuevaConsultaPageClient() {
       }
     />
 
-    <div className="mx-auto -mt-10 max-w-4xl px-4 pb-6 sm:px-6 sm:pb-6 lg:px-8 lg:pb-8">
-  <section className="relative pt-0 pb-6 sm:pb-6">
-    <div className="relative z-10 -mt-8 mb-6 rounded-[28px] border border-white/60 bg-white/95 p-4 shadow-[0_20px_50px_rgba(15,47,122,0.12)] backdrop-blur-sm">
-      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-        <div className="min-w-0 flex-1">
-          <p className="mb-1 text-sm text-gray-500">Paciente</p>
+  <div className="mx-auto -mt-10 max-w-4xl px-4 pb-6 sm:px-6 sm:pb-6 lg:px-8 lg:pb-8">
+<section className="relative pt-0 pb-6 sm:pb-6">
+  <div className="relative z-10 -mt-8 mb-6 rounded-[28px] border border-white/60 bg-white/95 p-4 shadow-[0_20px_50px_rgba(15,47,122,0.12)] backdrop-blur-sm">
+    <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+      <div className="min-w-0 flex-1">
+        <p className="mb-1 text-sm text-gray-500">Paciente</p>
 
-          {paciente ? (
-            <>
-              <p className="truncate text-lg font-semibold text-gray-950">
-                {paciente.nombre} {paciente.apellido}
-              </p>
-              <p className="mt-1 text-sm text-blue-700">
-                Paciente asignado para esta nueva consulta.
-              </p>
-            </>
-          ) : (
-            <p className="text-sm text-gray-600">
-              Busca paciente o registra uno nuevo.
+        {paciente ? (
+          <>
+            <p className="truncate text-lg font-semibold text-gray-950">
+              {paciente.nombre} {paciente.apellido}
             </p>
-          )}
-        </div>
+            <p className="mt-1 text-sm text-blue-600">
+              Listo para iniciar consulta.
+            </p>
+          </>
+        ) : (
+          <p className="text-sm text-gray-600">
+            Selecciona paciente para comenzar.
+          </p>
+        )}
+      </div>
 
+      {!paciente && (
         <div className="mt-2 flex flex-col gap-2 sm:mt-0 sm:flex-row sm:gap-3">
           <button
             type="button"
@@ -680,35 +681,62 @@ export default function NuevaConsultaPageClient() {
               query.set("returnTo", "/nueva-consulta");
               router.push(`/pacientes/nuevo?${query.toString()}`);
             }}
-            className="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm font-semibold text-gray-700 hover:bg-gray-50"
+            className="w-full rounded-xl border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition"
           >
             <span className="block sm:hidden">Nuevo</span>
             <span className="hidden sm:block">Nuevo paciente</span>
           </button>
         </div>
-      </div>
+      )}
+
+      {paciente && (
+        <div className="mt-2 flex flex-col gap-2 sm:mt-0 sm:flex-row sm:gap-3">
+          <button
+            type="button"
+            onClick={() => {
+              setMostrarBuscadorPacientes((prev) => !prev);
+            }}
+            className="w-full rounded-xl border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition"
+          >
+            <span className="block sm:hidden">Cambiar</span>
+            <span className="hidden sm:block">Cambiar paciente</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => {
+              setPaciente(null);
+            }}
+            className="w-full rounded-xl border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition"
+          >
+            <span className="block sm:hidden">Quitar</span>
+            <span className="hidden sm:block">Quitar paciente</span>
+          </button>
+        </div>
+      )}
     </div>
+  </div>
+</section>
 
-          {mostrarBuscadorPacientes && (
-            <div className="mb-6 rounded-2xl border border-gray-200 bg-white p-3 shadow-sm sm:p-4">
-              <div className="space-y-4">
-                <div>
-                  <label
-                    htmlFor="buscar-paciente-interno"
-                    className="mb-2 block text-sm font-medium text-gray-700"
-                  >
-                    Buscar paciente por nombre o apellido
-                  </label>
-
-                  <input
-                    id="buscar-paciente-interno"
-                    type="text"
-                    value={textoBusquedaPaciente}
-                    onChange={(e) => setTextoBusquedaPaciente(e.target.value)}
-                    placeholder="Escribe nombre o apellido..."
-                    className="w-full rounded-xl border border-gray-300 px-3 py-2.5 text-sm outline-none focus:border-gray-500"
-                  />
-                </div>
+        {mostrarBuscadorPacientes && (
+          <section className="mb-6 rounded-2xl border border-gray-200 bg-white p-3 shadow-sm sm:p-4">
+            <div className="space-y-4">
+              <div>
+                <label
+                  htmlFor="buscar-paciente-interno"
+                  className="mb-2 block text-sm font-medium text-gray-700"
+                >
+                  Buscar paciente por nombre o apellido
+                </label>
+                <input
+                  id="buscar-paciente-interno"
+                  type="text"
+                  value={textoBusquedaPaciente}
+                  onChange={(e) => setTextoBusquedaPaciente(e.target.value)}
+                  placeholder="Escribe nombre o apellido..."
+                  className="w-full rounded-xl border border-gray-300 px-3 py-2.5 text-sm outline-none focus:border-gray-500"
+                />
+              </div>
 
                 {buscandoPacientes ? (
                   <p className="text-sm text-gray-500">Buscando pacientes...</p>
@@ -740,14 +768,14 @@ export default function NuevaConsultaPageClient() {
                     ))}
                   </div>
                 ) : null}
-              </div>
             </div>
-          )}
+          </section>
+        )}
 
-       <form className="space-y-4" onSubmit={handleSubmit}>
-            <div>
+       <form className="space-y-3" onSubmit={handleSubmit}>
+            <div className="-mt-8 mb-4">
               <label className="mb-2 block text-sm font-medium text-gray-700">
-                Motivo consulta
+                Motivo de la consulta (obligatorio)
               </label>
 
               <textarea
@@ -840,11 +868,7 @@ export default function NuevaConsultaPageClient() {
                         setMensaje("Asigna un paciente antes de subir o grabar audio.");
                       }
                     }}
-                    className={`inline-flex w-full items-center justify-center rounded-xl px-4 py-3 text-sm font-semibold sm:w-auto ${
-                      audioFile
-                      ? "cursor-pointer border border-blue-300 bg-white text-blue-700 hover:bg-blue-50"
-                        : "cursor-pointer border border-gray-300 bg-white text-gray-700 hover:bg-gray-50"
-                    }`}
+                    className="inline-flex w-full items-center justify-center rounded-xl border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition sm:w-auto cursor-pointer"
                   >
                     {audioFile ? "Reemplazar archivo" : "Subir archivo"}
                   </label>
@@ -962,8 +986,7 @@ export default function NuevaConsultaPageClient() {
               {mensaje}
             </div>
           )}
-        </section>
-      </div>
+        </div>
     </main>
   );
 }
