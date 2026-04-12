@@ -532,7 +532,6 @@ export default function ConsultaPage() {
     <main className="relative isolate min-h-screen bg-[#f8fafc] px-4 py-6 sm:p-6 lg:p-8">
       <AppHeader
         titulo="Detalle de la consulta"
-        subtitulo="Transcripción-borrador clínico"
         paciente={`${paciente?.nombre ?? ""} ${paciente?.apellido ?? ""}`.trim()}
         nombreProfesional={userProfile?.nombre_profesional || undefined}
         nombreUsuario={userProfile?.nombre || undefined}
@@ -540,21 +539,20 @@ export default function ConsultaPage() {
         acciones={
           <div className="flex gap-2">
             <Link
+              href="/nueva-consulta"
+              className="inline-block rounded-xl border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-blue-600 hover:bg-gray-50 transition"
+            >
+              Inicio
+            </Link>
+            <Link
               href={`/pacientes/${pacienteId}/consultas/${consultaId}/pdf`}
               className="inline-block rounded-xl bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
             >
               Generar PDF
             </Link>
-            <Link
-              href={`/nueva-consulta?pacienteId=${pacienteId}`}
-              className="inline-block rounded-xl bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
-            >
-              Nueva consulta
-            </Link>
           </div>
         }
       />
-
       <div
         className="pointer-events-none fixed inset-x-0 bottom-0 z-0 h-[28vh]"
         style={{
@@ -565,6 +563,35 @@ export default function ConsultaPage() {
         }}
       />
       <div className="pointer-events-none fixed inset-x-0 bottom-0 z-0 h-[28vh] bg-gradient-to-t from-transparent via-white/25 to-white" />
+
+      {(procesoListo || consulta.borrador_clinico) && (
+        <div className="relative z-10 mx-auto max-w-4xl mb-6">
+          <section className="rounded-2xl bg-white border border-gray-200 shadow-sm p-4 sm:p-6">
+            <h2 className="text-lg font-semibold text-gray-900">Consulta finalizada</h2>
+            <p className="mt-1 text-sm text-gray-600">¿Qué deseas hacer ahora?</p>
+            <div className="mt-4 flex flex-wrap gap-3">
+              <Link
+                href={`/nueva-consulta?pacienteId=${pacienteId}`}
+                className="inline-flex items-center rounded-xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow hover:bg-blue-700 transition"
+              >
+                Nueva consulta
+              </Link>
+              <Link
+                href={`/pacientes/${pacienteId}`}
+                className="inline-flex items-center rounded-xl border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition"
+              >
+                Ver ficha paciente
+              </Link>
+              <Link
+                href="/dashboard"
+                className="inline-flex items-center rounded-xl border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition"
+              >
+                Ir al panel
+              </Link>
+            </div>
+          </section>
+        </div>
+      )}
 
       <div className="relative z-10 mx-auto max-w-4xl space-y-6">
         <section className="rounded-2xl bg-white border border-gray-200 shadow-sm p-4 sm:p-6">

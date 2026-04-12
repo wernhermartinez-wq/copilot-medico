@@ -848,7 +848,7 @@ export default function NuevaConsultaPageClient() {
                       handleToggleGrabacion();
                     }}
                     disabled={!grabando && !!audioFile}
-                    className={`inline-flex w-full items-center justify-center rounded-xl px-4 py-3 text-sm font-semibold sm:w-auto ${
+                    className={`group inline-flex w-full items-center justify-center rounded-xl px-4 py-3 text-sm font-semibold sm:w-auto ${
                       grabando
                         ? "bg-red-600 text-white hover:bg-red-700"
                         : audioFile
@@ -857,6 +857,13 @@ export default function NuevaConsultaPageClient() {
                     }`}
                   >
                     {grabando ? "Detener" : "Grabar"}
+                    {!pacienteAsignado && (
+                      <svg className="ml-2 h-4 w-4 opacity-0 group-hover:opacity-100 transition-opacity" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <circle cx="12" cy="12" r="10" />
+                        <line x1="15" y1="9" x2="9" y2="15" />
+                        <line x1="9" y1="9" x2="15" y2="15" />
+                      </svg>
+                    )}
                   </button>
 
                   <label
@@ -895,7 +902,7 @@ export default function NuevaConsultaPageClient() {
                       <button
                         type="button"
                         onClick={handleQuitarAudio}
-                        className="rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                        className="rounded-lg border border-white-300 px-3 py-2 text-sm text--700 hover:bg--50"
                       >
                         Quitar audio
                       </button>

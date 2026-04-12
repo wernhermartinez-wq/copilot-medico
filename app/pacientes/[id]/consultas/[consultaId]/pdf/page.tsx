@@ -442,6 +442,33 @@ export default function ConsultaPdfPage() {
             </div>
           </footer>
         </article>
+
+        <div className="mt-8 print:hidden">
+          <section className="rounded-2xl border border-gray-200 bg-white shadow-sm p-4 sm:p-6">
+            <h2 className="text-lg font-semibold text-gray-900">Documento listo</h2>
+            <p className="mt-1 text-sm text-gray-600">¿Qué deseas hacer ahora?</p>
+            <div className="mt-4 flex flex-wrap gap-3">
+              <Link
+                href="/nueva-consulta"
+                className="inline-flex items-center rounded-xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow hover:bg-blue-700 transition"
+              >
+                Inicio
+              </Link>
+              <Link
+                href={`/pacientes/${id}`}
+                className="inline-flex items-center rounded-xl border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition"
+              >
+                Ver ficha paciente
+              </Link>
+              <Link
+                href={`/pacientes/${id}/consultas/${consultaId}`}
+                className="inline-flex items-center rounded-xl border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition"
+              >
+                Volver a consulta
+              </Link>
+            </div>
+          </section>
+        </div>
       </div>
     </main>
   );

@@ -130,12 +130,20 @@ export default function PacientePage() {
           nombreUsuario={userProfile?.nombre || undefined}
           rol={userProfile?.rol}
           acciones={
-            <Link
-              href="/dashboard"
-              className="inline-flex items-center rounded-xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow hover:bg-blue-700 transition"
-            >
-              Ir a pacientes
-            </Link>
+            <div className="flex gap-3">
+              <Link
+                href="/nueva-consulta"
+                className="inline-flex items-center rounded-xl border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition"
+              >
+                Inicio
+              </Link>
+              <Link
+                href="/dashboard"
+                className="inline-flex items-center rounded-xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow hover:bg-blue-700 transition"
+              >
+                Ir a pacientes
+              </Link>
+            </div>
           }
         />
 
@@ -158,12 +166,20 @@ export default function PacientePage() {
           nombreUsuario={userProfile?.nombre || undefined}
           rol={userProfile?.rol}
           acciones={
-            <Link
-              href="/dashboard"
-              className="inline-flex items-center rounded-xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow hover:bg-blue-700 transition"
-            >
-              Ir a pacientes
-            </Link>
+            <div className="flex gap-3">
+              <Link
+                href="/nueva-consulta"
+                className="inline-flex items-center rounded-xl border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition"
+              >
+                Inicio
+              </Link>
+              <Link
+                href="/dashboard"
+                className="inline-flex items-center rounded-xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow hover:bg-blue-700 transition"
+              >
+                Ir a pacientes
+              </Link>
+            </div>
           }
         />
 
@@ -191,12 +207,20 @@ export default function PacientePage() {
         nombreUsuario={userProfile?.nombre || undefined}
         rol={userProfile?.rol}
         acciones={
-          <Link
-            href="/dashboard"
-            className="inline-flex items-center rounded-xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow hover:bg-blue-700 transition"
-          >
-            Ir a pacientes
-          </Link>
+          <div className="flex gap-3">
+            <Link
+              href="/nueva-consulta"
+              className="inline-flex items-center rounded-xl border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition"
+            >
+              Inicio
+            </Link>
+            <Link
+              href="/dashboard"
+              className="inline-flex items-center rounded-xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow hover:bg-blue-700 transition"
+            >
+              Ir a pacientes
+            </Link>
+          </div>
         }
       />
 

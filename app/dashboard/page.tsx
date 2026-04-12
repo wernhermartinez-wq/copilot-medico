@@ -149,14 +149,14 @@ if (userError || !user) {
           <div className="flex items-center gap-2">
             <Link
               href="/nueva-consulta"
-              className="inline-flex items-center rounded-xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow hover:bg-blue-700 transition"
+              className="inline-flex items-center rounded-xl border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-blue-600 hover:bg-gray-50 transition"
             >
-              Nueva consulta
+              Inicio
             </Link>
 
             <Link
               href="/pacientes/nuevo?returnTo=/nueva-consulta"
-              className="inline-flex items-center rounded-xl border border-blue-300 bg-blue-50 px-4 py-2 text-sm font-semibold text-blue-700 hover:bg-blue-100 transition"
+              className="inline-flex items-center rounded-xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow hover:bg-blue-700 transition"
             >
               Nuevo paciente
             </Link>

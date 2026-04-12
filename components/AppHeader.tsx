@@ -49,6 +49,13 @@ export default function AppHeader({
         <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-b from-transparent via-white/18 to-[#f8fafc]" />
 
         <div className="relative w-full px-4 pb-14 pt-6 sm:px-6 sm:pb-16 sm:pt-8">
+          <button
+            onClick={handleLogout}
+            className="absolute right-4 top-6 rounded-xl border border-white/20 bg-white/8 px-3 py-1.5 text-xs font-medium text-white/90 backdrop-blur-sm transition hover:bg-white/12 hover:text-white sm:right-6 sm:top-8"
+          >
+            Salir
+          </button>
+
           <div className="mt-6 max-w-[180px] sm:max-w-[270px]">
             {backHref ? (
               <div className="mb-2">
@@ -80,14 +87,6 @@ export default function AppHeader({
 
           <div className="mt-6 flex flex-wrap items-center justify-start gap-2 sm:justify-end">
             {acciones ? <div className="min-w-0 flex items-center gap-2">{acciones}</div> : null}
-
-            <button
-              onClick={handleLogout}
-              className="shrink-0 rounded-2xl border border-white/25 bg-white/10 px-3 py-2 text-sm font-medium text-white backdrop-blur-md transition hover:bg-white/15"
-            >
-              <span className="sm:hidden">Salir</span>
-              <span className="hidden sm:inline">Cerrar sesión</span>
-            </button>
           </div>
         </div>
       </div>
