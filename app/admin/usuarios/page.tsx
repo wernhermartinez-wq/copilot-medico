@@ -20,16 +20,11 @@ type Usuario = {
 function EstadoBadge({ activo }: { activo: boolean }) {
   return (
     <span
-      style={{
-        display: "inline-block",
-        padding: "4px 10px",
-        borderRadius: 999,
-        fontSize: 12,
-        fontWeight: 600,
-        background: activo ? "#dcfce7" : "#fee2e2",
-        color: activo ? "#166534" : "#991b1b",
-        border: activo ? "1px solid #86efac" : "1px solid #fca5a5",
-      }}
+      className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold ${
+        activo
+          ? "border border-green-400 bg-green-100 text-green-700"
+          : "border border-red-400 bg-red-100 text-red-700"
+      }`}
     >
       {activo ? "Activo" : "Inactivo"}
     </span>
@@ -184,31 +179,13 @@ function UsuarioItem({
   }
 
   return (
-    <div
-      style={{
-        marginBottom: 14,
-        padding: 16,
-        border: "1px solid #e2e8f0",
-        borderRadius: 12,
-        background: "#ffffff",
-        boxShadow: "0 1px 2px rgba(0,0,0,0.04)",
-      }}
-    >
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          gap: 12,
-          alignItems: "flex-start",
-          flexWrap: "wrap",
-          marginBottom: 14,
-        }}
-      >
-        <div>
-          <div style={{ fontSize: 18, fontWeight: 700, color: "#0f172a" }}>
+    <div className="mb-4 rounded-2xl border border-gray-200 bg-white p-4 shadow-sm sm:p-6">
+      <div className="mb-4 flex flex-wrap items-start justify-between gap-3">
+        <div className="min-w-0 flex-1">
+          <div className="text-lg font-semibold text-gray-900">
             {usuario.nombre}
           </div>
-          <div style={{ marginTop: 6, fontSize: 13, color: "#64748b" }}>
+          <div className="mt-1 text-sm text-gray-600">
             {usuario.email}
           </div>
         </div>
@@ -216,35 +193,18 @@ function UsuarioItem({
         <EstadoBadge activo={usuario.activo} />
       </div>
 
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "1fr 1fr",
-          gap: 12,
-          marginBottom: 12,
-        }}
-      >
+      <div className="mb-4 grid gap-3 sm:grid-cols-2">
         <input
           value={nombre}
           onChange={(e) => setNombre(e.target.value)}
           placeholder="Nombre"
-          style={{
-            padding: "10px 12px",
-            borderRadius: 8,
-            border: "1px solid #cbd5e1",
-            outline: "none",
-          }}
+          className="w-full rounded-xl border border-gray-300 px-4 py-3 text-gray-900 outline-none focus:border-gray-400"
         />
 
         <select
           value={rol}
           onChange={(e) => setRol(e.target.value as "admin" | "medico")}
-          style={{
-            padding: "10px 12px",
-            borderRadius: 8,
-            border: "1px solid #cbd5e1",
-            background: "#fff",
-          }}
+          className="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-gray-900 outline-none focus:border-gray-400"
         >
           <option value="medico">Médico</option>
           <option value="admin">Admin</option>
@@ -254,72 +214,37 @@ function UsuarioItem({
           value={nombreProfesional}
           onChange={(e) => setNombreProfesional(e.target.value)}
           placeholder="Nombre profesional"
-          style={{
-            padding: "10px 12px",
-            borderRadius: 8,
-            border: "1px solid #cbd5e1",
-            outline: "none",
-          }}
+          className="w-full rounded-xl border border-gray-300 px-4 py-3 text-gray-900 outline-none focus:border-gray-400"
         />
 
         <input
           value={numeroColegiado}
           onChange={(e) => setNumeroColegiado(e.target.value)}
           placeholder="Número de colegiado"
-          style={{
-            padding: "10px 12px",
-            borderRadius: 8,
-            border: "1px solid #cbd5e1",
-            outline: "none",
-          }}
+          className="w-full rounded-xl border border-gray-300 px-4 py-3 text-gray-900 outline-none focus:border-gray-400"
         />
 
         <input
           value={emailProfesional}
           onChange={(e) => setEmailProfesional(e.target.value)}
           placeholder="Email profesional"
-          style={{
-            padding: "10px 12px",
-            borderRadius: 8,
-            border: "1px solid #cbd5e1",
-            outline: "none",
-          }}
+          className="w-full rounded-xl border border-gray-300 px-4 py-3 text-gray-900 outline-none focus:border-gray-400"
         />
 
         <input
           value={telefonoProfesional}
           onChange={(e) => setTelefonoProfesional(e.target.value)}
           placeholder="Teléfono profesional"
-          style={{
-            padding: "10px 12px",
-            borderRadius: 8,
-            border: "1px solid #cbd5e1",
-            outline: "none",
-          }}
+          className="w-full rounded-xl border border-gray-300 px-4 py-3 text-gray-900 outline-none focus:border-gray-400"
         />
       </div>
 
-      <div
-        style={{
-          display: "flex",
-          gap: 8,
-          flexWrap: "wrap",
-          justifyContent: "flex-start",
-        }}
-      >
+      <div className="flex flex-wrap gap-3">
         <button
           type="button"
           onClick={guardarCambios}
           disabled={loading}
-          style={{
-            padding: "10px 14px",
-            borderRadius: 8,
-            border: "none",
-            background: "#0f172a",
-            color: "#fff",
-            cursor: "pointer",
-            opacity: loading ? 0.7 : 1,
-          }}
+          className="rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white shadow hover:bg-blue-700 disabled:opacity-60"
         >
           {loading ? "Guardando..." : "Guardar"}
         </button>
@@ -328,14 +253,7 @@ function UsuarioItem({
           type="button"
           onClick={resetCampos}
           disabled={loading}
-          style={{
-            padding: "10px 14px",
-            borderRadius: 8,
-            border: "1px solid #cbd5e1",
-            background: "#fff",
-            color: "#334155",
-            cursor: "pointer",
-          }}
+          className="rounded-xl border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-60"
         >
           Cancelar
         </button>
@@ -344,21 +262,18 @@ function UsuarioItem({
           type="button"
           onClick={toggleActivo}
           disabled={loading}
-          style={{
-            padding: "10px 14px",
-            borderRadius: 8,
-            border: usuario.activo ? "1px solid #fecaca" : "1px solid #bfdbfe",
-            background: "#fff",
-            color: usuario.activo ? "#dc2626" : "#2563eb",
-            cursor: "pointer",
-          }}
+          className={`rounded-xl border px-4 py-2.5 text-sm font-medium disabled:opacity-60 ${
+            usuario.activo
+              ? "border-red-300 bg-white text-red-600 hover:bg-red-50"
+              : "border-blue-300 bg-white text-blue-600 hover:bg-blue-50"
+          }`}
         >
           {usuario.activo ? "Desactivar" : "Activar"}
         </button>
       </div>
 
       {error && (
-        <p style={{ color: "#dc2626", marginTop: 10, fontSize: 14 }}>{error}</p>
+        <p className="mt-3 text-sm text-red-600">{error}</p>
       )}
     </div>
   );
@@ -469,23 +384,27 @@ export default function AdminUsuariosPage() {
 
   if (loadingProfile) {
     return (
-      <main style={{ padding: 24 }}>
-        <p>Cargando panel de administración...</p>
+      <main className="min-h-screen bg-[#f8fafc] px-4 py-6 sm:p-6 lg:p-8">
+        <div className="mx-auto max-w-4xl rounded-2xl bg-white p-4 shadow-sm sm:p-6">
+          <p className="text-gray-600">Cargando panel de administración...</p>
+        </div>
       </main>
     );
   }
 
   if (!profile) {
     return (
-      <main style={{ padding: 24 }}>
-        <p style={{ color: "#dc2626" }}>No se pudo cargar el perfil del usuario.</p>
+      <main className="min-h-screen bg-[#f8fafc] px-4 py-6 sm:p-6 lg:p-8">
+        <div className="mx-auto max-w-4xl rounded-2xl bg-white p-4 shadow-sm sm:p-6">
+          <p className="text-red-600">No se pudo cargar el perfil del usuario.</p>
+        </div>
       </main>
     );
   }
 
   if (profile.rol !== "admin") {
     return (
-      <main style={{ padding: 24 }}>
+      <main className="min-h-screen bg-[#f8fafc] px-4 py-6 sm:p-6 lg:p-8">
         <AppHeader
           titulo="Administración de usuarios"
           subtitulo="Acceso restringido"
@@ -494,180 +413,117 @@ export default function AdminUsuariosPage() {
           backHref="/dashboard"
           backLabel="Volver al panel"
         />
-        <p style={{ color: "#dc2626", marginTop: 20 }}>
-          No tienes permisos para acceder a esta sección.
-        </p>
+        <div className="mx-auto max-w-4xl mt-6 rounded-2xl bg-white p-4 shadow-sm sm:p-6">
+          <p className="text-red-600">
+            No tienes permisos para acceder a esta sección.
+          </p>
+        </div>
       </main>
     );
   }
 
   return (
-    <main
-      style={{
-        minHeight: "100vh",
-        background: "#f8fafc",
-        fontFamily: "Arial, sans-serif",
-      }}
-    >
+    <main className="relative isolate min-h-screen bg-[#f8fafc] px-4 py-6 sm:p-6 lg:p-8">
       <AppHeader
-  titulo="Administración de usuarios"
-  subtitulo="Alta, edición y control del estado de usuarios del sistema."
-  nombreProfesional={profile.nombre_profesional || undefined}
-  nombreUsuario={profile.nombre || profile.email || undefined}
-  rol={profile.rol}
-  backHref="/dashboard"
-  backLabel="Volver al panel"
-/>
+        titulo="Administración de usuarios"
+        subtitulo="Alta, edición y control del estado de usuarios del sistema."
+        nombreProfesional={profile.nombre_profesional || undefined}
+        nombreUsuario={profile.nombre || profile.email || undefined}
+        rol={profile.rol}
+        backHref="/dashboard"
+        backLabel="Volver al panel"
+      />
 
-      <div
-        style={{
-          padding: 24,
-          maxWidth: 980,
-          margin: "0 auto",
-        }}
-      >
-        <form
-          onSubmit={crearUsuario}
-          style={{
-            marginBottom: 32,
-            background: "#ffffff",
-            border: "1px solid #e2e8f0",
-            borderRadius: 14,
-            padding: 20,
-            boxShadow: "0 1px 2px rgba(0,0,0,0.04)",
-          }}
-        >
-          <h2 style={{ marginTop: 0, marginBottom: 16, color: "#0f172a" }}>
-            Crear usuario
-          </h2>
+      <div className="mx-auto -mt-10 max-w-4xl px-4 pb-6 sm:px-6 sm:pb-6 lg:px-8 lg:pb-8">
+        <section className="relative z-10 -mt-8 mb-6 rounded-[28px] border border-white/60 bg-white/95 p-4 shadow-[0_20px_50px_rgba(15,47,122,0.12)] backdrop-blur-sm sm:p-6">
+          <form onSubmit={crearUsuario}>
+            <h2 className="mb-4 text-lg font-semibold text-gray-900">
+              Crear usuario
+            </h2>
 
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "1fr 1fr",
-              gap: 12,
-            }}
-          >
-            <input
-              placeholder="Nombre"
-              value={nombre}
-              onChange={(e) => setNombre(e.target.value)}
-              style={{
-                padding: "12px 14px",
-                borderRadius: 8,
-                border: "1px solid #cbd5e1",
-              }}
-            />
+            <div className="grid gap-3 sm:grid-cols-2">
+              <input
+                placeholder="Nombre"
+                value={nombre}
+                onChange={(e) => setNombre(e.target.value)}
+                className="w-full rounded-xl border border-gray-300 px-4 py-3 text-gray-900 outline-none focus:border-gray-400"
+              />
 
-            <input
-              placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              style={{
-                padding: "12px 14px",
-                borderRadius: 8,
-                border: "1px solid #cbd5e1",
-              }}
-            />
+              <input
+                placeholder="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full rounded-xl border border-gray-300 px-4 py-3 text-gray-900 outline-none focus:border-gray-400"
+              />
 
-            <input
-              placeholder="Contraseña"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              style={{
-                padding: "12px 14px",
-                borderRadius: 8,
-                border: "1px solid #cbd5e1",
-              }}
-            />
+              <input
+                placeholder="Contraseña"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full rounded-xl border border-gray-300 px-4 py-3 text-gray-900 outline-none focus:border-gray-400"
+              />
 
-            <select
-              value={rol}
-              onChange={(e) => setRol(e.target.value as "admin" | "medico")}
-              style={{
-                padding: "12px 14px",
-                borderRadius: 8,
-                border: "1px solid #cbd5e1",
-                background: "#fff",
-              }}
-            >
-              <option value="medico">Médico</option>
-              <option value="admin">Admin</option>
-            </select>
+              <select
+                value={rol}
+                onChange={(e) => setRol(e.target.value as "admin" | "medico")}
+                className="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-gray-900 outline-none focus:border-gray-400"
+              >
+                <option value="medico">Médico</option>
+                <option value="admin">Admin</option>
+              </select>
 
-            <input
-              placeholder="Nombre profesional"
-              value={nombreProfesional}
-              onChange={(e) => setNombreProfesional(e.target.value)}
-              style={{
-                padding: "12px 14px",
-                borderRadius: 8,
-                border: "1px solid #cbd5e1",
-              }}
-            />
+              <input
+                placeholder="Nombre profesional"
+                value={nombreProfesional}
+                onChange={(e) => setNombreProfesional(e.target.value)}
+                className="w-full rounded-xl border border-gray-300 px-4 py-3 text-gray-900 outline-none focus:border-gray-400"
+              />
 
-            <input
-              placeholder="Número de colegiado"
-              value={numeroColegiado}
-              onChange={(e) => setNumeroColegiado(e.target.value)}
-              style={{
-                padding: "12px 14px",
-                borderRadius: 8,
-                border: "1px solid #cbd5e1",
-              }}
-            />
+              <input
+                placeholder="Número de colegiado"
+                value={numeroColegiado}
+                onChange={(e) => setNumeroColegiado(e.target.value)}
+                className="w-full rounded-xl border border-gray-300 px-4 py-3 text-gray-900 outline-none focus:border-gray-400"
+              />
 
-            <input
-              placeholder="Email profesional"
-              value={emailProfesional}
-              onChange={(e) => setEmailProfesional(e.target.value)}
-              style={{
-                padding: "12px 14px",
-                borderRadius: 8,
-                border: "1px solid #cbd5e1",
-              }}
-            />
+              <input
+                placeholder="Email profesional"
+                value={emailProfesional}
+                onChange={(e) => setEmailProfesional(e.target.value)}
+                className="w-full rounded-xl border border-gray-300 px-4 py-3 text-gray-900 outline-none focus:border-gray-400"
+              />
 
-            <input
-              placeholder="Teléfono profesional"
-              value={telefonoProfesional}
-              onChange={(e) => setTelefonoProfesional(e.target.value)}
-              style={{
-                padding: "12px 14px",
-                borderRadius: 8,
-                border: "1px solid #cbd5e1",
-              }}
-            />
-          </div>
+              <input
+                placeholder="Teléfono profesional"
+                value={telefonoProfesional}
+                onChange={(e) => setTelefonoProfesional(e.target.value)}
+                className="w-full rounded-xl border border-gray-300 px-4 py-3 text-gray-900 outline-none focus:border-gray-400"
+              />
+            </div>
 
-          <div style={{ marginTop: 16 }}>
-            <button
-              type="submit"
-              disabled={loading}
-              style={{
-                padding: "12px 16px",
-                borderRadius: 8,
-                border: "none",
-                background: "#0f172a",
-                color: "#fff",
-                cursor: "pointer",
-                opacity: loading ? 0.7 : 1,
-              }}
-            >
-              {loading ? "Creando..." : "Crear usuario"}
-            </button>
-          </div>
+            <div className="mt-4">
+              <button
+                type="submit"
+                disabled={loading}
+                className="rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white shadow hover:bg-blue-700 disabled:opacity-60"
+              >
+                {loading ? "Creando..." : "Crear usuario"}
+              </button>
+            </div>
 
-          {error && <p style={{ color: "#dc2626", marginTop: 10 }}>{error}</p>}
-        </form>
+            {error && <p className="mt-3 text-sm text-red-600">{error}</p>}
+          </form>
+        </section>
 
         <div>
-          <h2 style={{ marginBottom: 14, color: "#0f172a" }}>Usuarios</h2>
+          <h2 className="mb-4 text-lg font-semibold text-gray-900">Usuarios</h2>
 
-          {usuarios.map((u) => (
-            <UsuarioItem key={u.id} usuario={u} onUpdate={cargarUsuarios} />
-          ))}
+          <div className="space-y-4">
+            {usuarios.map((u) => (
+              <UsuarioItem key={u.id} usuario={u} onUpdate={cargarUsuarios} />
+            ))}
+          </div>
         </div>
       </div>
     </main>

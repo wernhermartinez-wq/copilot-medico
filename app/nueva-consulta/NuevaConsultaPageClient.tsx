@@ -647,7 +647,7 @@ export default function NuevaConsultaPageClient() {
               {paciente.nombre} {paciente.apellido}
             </p>
             <p className="mt-1 text-sm text-blue-600">
-              Listo para iniciar consulta.
+              {audioFile ? "Consulta iniciada." : "Listo para iniciar consulta."}
             </p>
           </>
         ) : (
@@ -681,7 +681,7 @@ export default function NuevaConsultaPageClient() {
               query.set("returnTo", "/nueva-consulta");
               router.push(`/pacientes/nuevo?${query.toString()}`);
             }}
-            className="w-full rounded-xl border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition"
+            className="w-full rounded-xl border border-stone-400 bg-stone-100 px-4 py-3 text-sm font-medium text-stone-800 hover:bg-stone-200 transition"
           >
             <span className="block sm:hidden">Nuevo</span>
             <span className="hidden sm:block">Nuevo paciente</span>
@@ -689,14 +689,14 @@ export default function NuevaConsultaPageClient() {
         </div>
       )}
 
-      {paciente && (
+      {paciente && !audioFile && (
         <div className="mt-2 flex flex-col gap-2 sm:mt-0 sm:flex-row sm:gap-3">
           <button
             type="button"
             onClick={() => {
               setMostrarBuscadorPacientes((prev) => !prev);
             }}
-            className="w-full rounded-xl border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition"
+            className="w-full rounded-xl border border-stone-300 bg-stone-50 px-4 py-3 text-sm font-medium text-stone-700 hover:bg-stone-100 transition"
           >
             <span className="block sm:hidden">Cambiar</span>
             <span className="hidden sm:block">Cambiar paciente</span>
@@ -707,7 +707,7 @@ export default function NuevaConsultaPageClient() {
             onClick={() => {
               setPaciente(null);
             }}
-            className="w-full rounded-xl border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition"
+            className="w-full rounded-xl border border-stone-300 bg-stone-50 px-4 py-3 text-sm font-medium text-stone-700 hover:bg-stone-100 transition"
           >
             <span className="block sm:hidden">Quitar</span>
             <span className="hidden sm:block">Quitar paciente</span>
@@ -775,7 +775,7 @@ export default function NuevaConsultaPageClient() {
        <form className="space-y-3" onSubmit={handleSubmit}>
             <div className="-mt-8 mb-4">
               <label className="mb-2 block text-sm font-medium text-gray-700">
-                Motivo de la consulta (obligatorio)
+                Motivo de la consulta (opcional)
               </label>
 
               <textarea
@@ -856,16 +856,8 @@ export default function NuevaConsultaPageClient() {
                         : "bg-blue-600 text-white hover:bg-blue-700"
                     }`}
                   >
-                    {grabando ? "Detener" : "Grabar"}
-                    {!pacienteAsignado && (
-                      <svg className="ml-2 h-4 w-4 opacity-0 group-hover:opacity-100 transition-opacity" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <circle cx="12" cy="12" r="10" />
-                        <line x1="15" y1="9" x2="9" y2="15" />
-                        <line x1="9" y1="9" x2="15" y2="15" />
-                      </svg>
-                    )}
+                    {grabando ? "Detener grabación" : "Grabar"}
                   </button>
-
                   <label
                     htmlFor="audioFile"
                     onClick={(e) => {
@@ -875,12 +867,13 @@ export default function NuevaConsultaPageClient() {
                         setMensaje("Asigna un paciente antes de subir o grabar audio.");
                       }
                     }}
-                    className="inline-flex w-full items-center justify-center rounded-xl border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition sm:w-auto cursor-pointer"
+                    className="inline-flex w-full items-center justify-center rounded-xl border border-stone-400 bg-stone-100 px-4 py-3 text-sm font-medium text-stone-800 hover:bg-stone-200 transition sm:w-auto cursor-pointer"
                   >
                     {audioFile ? "Reemplazar archivo" : "Subir archivo"}
                   </label>
-
-                  <span className="min-w-0 flex-1 truncate px-2 text-center text-sm text-gray-600">
+                  <span
+                    className="min-w-0 flex-1 truncate px-2 text-center text-sm text-gray-600"
+                  >
                     {audioFile ? audioFile.name : "Ningún archivo seleccionado"}
                   </span>
                   {!pacienteAsignado && (
@@ -889,83 +882,101 @@ export default function NuevaConsultaPageClient() {
                     </p>
                   )}
                 </div>
+              </div>
 
-                <div className="space-y-6">
-                  {!audioFile && (
-                   <p className="text-sm text-blue-700">
-                      Sube un archivo o grabalo directamente.
-                    </p>
-                  )}
+              <div className="space-y-6">
+                {!audioFile && pacienteAsignado && !grabando && (
+                  <p className="text-sm text-gray-600">
+                    Listo para grabar
+                  </p>
+                )}
 
-                  {audioFile && !grabando && (
-                    <div className="flex justify-center">
-                      <button
-                        type="button"
-                        onClick={handleQuitarAudio}
-                        className="rounded-lg border border-white-300 px-3 py-2 text-sm text--700 hover:bg--50"
-                      >
-                        Quitar audio
-                      </button>
-                    </div>
-                  )}
+                {!audioFile && (
+                 <p className="text-sm text-blue-700">
+                    Sube un archivo o grabalo directamente.
+                  </p>
+                )}
 
-                  {audioFile && !grabando && (
-                    <p className="text-sm text-green-700">
-                      Audio listo para procesar. Si quieres cambiarlo, sube otro
-                      o graba uno nuevo.
-                    </p>
-                  )}
-
-                  {grabando && (
-                    <div className="space-y-3 rounded-xl border border-red-200 bg-red-50 px-4 py-4 text-sm text-red-700">
-                      <div className="flex flex-wrap items-center gap-3">
-                        <span className="h-2 w-2 rounded-full bg-red-600" />
-                        <span className="font-medium">Grabando audio...</span>
-
-                        <span className="rounded-md bg-white/70 px-3 py-1 font-mono text-sm text-red-700">
-                          {formatearTiempo(segundosGrabacion)}
-                        </span>
-
-                        <span className="text-sm text-red-600/80">
-                          Pulsa "DETENER" para finalizar.
-                        </span>
-                      </div>
-
-                      <div className="flex items-end justify-center gap-1.5">
-                        {barrasVumetro.map((activa, index) => (
-                          <span
-                            key={index}
-                            className={`w-2 rounded-sm transition-all duration-100 ${
-                              activa ? "bg-red-600" : "bg-red-200"
-                            }`}
-                            style={{
-                              height: `${12 + index * 2}px`,
-                              opacity: activa ? 1 : 0.45,
-                            }}
-                          />
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </div>
-
-                               {audioPreviewUrl && !grabando && (
-                  <div className="rounded-xl border border-gray-200 bg-white p-3">
-                    <p className="mb-2 text-sm font-medium text-gray-700">
-                      Vista previa del audio
-                    </p>
-
-                    <audio
-                      key={audioPreviewUrl}
-                      controls
-                      className="w-full"
-                      src={audioPreviewUrl}
+                {audioFile && !grabando && (
+                  <div className="flex justify-center">
+                    <button
+                      type="button"
+                      onClick={handleQuitarAudio}
+                      className="inline-flex items-center rounded-xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow hover:bg-blue-700 transition"
                     >
-                      Tu navegador no puede reproducir este audio.
-                    </audio>
+                      Quitar audio
+                    </button>
+                  </div>
+                )}
+
+                {audioFile && !grabando && (
+                  <p className="text-sm text-green-700">
+                    Audio listo para procesar. Si quieres cambiarlo, sube otro
+                    o graba uno nuevo.
+                  </p>
+                )}
+
+                {audioFile && !grabando && guardando && (
+                  <div className="space-y-3 rounded-xl border border-blue-200 bg-blue-50 px-4 py-4 text-sm text-blue-700">
+                    <div className="flex items-center gap-3">
+                      <div className="h-4 w-4 animate-spin rounded-full border-2 border-blue-600 border-t-transparent" />
+                      <span className="font-medium">Procesando audio...</span>
+                    </div>
+                    <p className="text-sm text-blue-600/80">
+                      Estamos preparando la transcripción y el borrador clínico.
+                    </p>
+                  </div>
+                )}
+
+                {grabando && (
+                  <div className="space-y-3 rounded-xl border border-red-200 bg-red-50 px-4 py-4 text-sm text-red-700">
+                    <div className="flex flex-wrap items-center gap-3">
+                      <span className="h-2 w-2 rounded-full bg-red-600" />
+                      <span className="font-medium">● Grabando audio</span>
+
+                      <span className="rounded-md bg-white/70 px-3 py-1 font-mono text-sm text-red-700">
+                        {formatearTiempo(segundosGrabacion)}
+                      </span>
+
+                      <span className="text-sm text-red-600/80">
+                        Pulsa "DETENER" para finalizar.
+                      </span>
+                    </div>
+
+                    <div className="flex items-end justify-center gap-1.5">
+                      {barrasVumetro.map((activa, index) => (
+                        <span
+                          key={index}
+                          className={`w-2 rounded-sm transition-all duration-100 ${
+                            activa ? "bg-red-600" : "bg-red-200"
+                          }`}
+                          style={{
+                            height: `${12 + index * 2}px`,
+                            opacity: activa ? 1 : 0.45,
+                          }}
+                        />
+                      ))}
+                    </div>
                   </div>
                 )}
               </div>
+
+              {audioPreviewUrl && !grabando && (
+                <div className="rounded-xl border border-gray-200 bg-white p-3">
+                  <p className="mb-2 text-sm font-medium text-gray-700">
+                    Vista previa del audio
+                  </p>
+
+                  <audio
+                    key={audioPreviewUrl}
+                    controls
+                    className="w-full"
+                    src={audioPreviewUrl}
+                  >
+                    Tu navegador no puede reproducir este audio.
+                  </audio>
+                </div>
+              )}
             </div>
           </div>
 
@@ -994,6 +1005,55 @@ export default function NuevaConsultaPageClient() {
             </div>
           )}
         </div>
+
+        {grabando && (
+          <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center">
+            <div className="w-full max-w-md rounded-2xl bg-white p-8 shadow-2xl">
+              <div className="space-y-6 text-center">
+                <div>
+                  <p className="text-sm text-gray-500">Paciente</p>
+                  <p className="text-xl font-semibold text-gray-900">
+                    {paciente?.nombre} {paciente?.apellido}
+                  </p>
+                </div>
+
+                <div className="space-y-4">
+                  <div className="flex items-center justify-center gap-3">
+                    <span className="h-3 w-3 rounded-full bg-red-600 animate-pulse" />
+                    <span className="text-lg font-medium text-gray-900">Grabando audio</span>
+                  </div>
+
+                  <span className="inline-block rounded-xl bg-gray-100 px-8 py-4 text-5xl font-bold font-mono text-gray-900">
+                    {formatearTiempo(segundosGrabacion)}
+                  </span>
+                </div>
+
+                <div className="flex items-end justify-center gap-1.5 py-4">
+                  {barrasVumetro.map((activa, index) => (
+                    <span
+                      key={index}
+                      className={`w-3 rounded-sm transition-all duration-100 ${
+                        activa ? "bg-red-600" : "bg-red-200"
+                      }`}
+                      style={{
+                        height: `${16 + index * 3}px`,
+                        opacity: activa ? 1 : 0.45,
+                      }}
+                    />
+                  ))}
+                </div>
+
+                <button
+                  type="button"
+                  onClick={handleToggleGrabacion}
+                  className="w-full rounded-xl bg-red-600 px-6 py-4 text-base font-semibold text-white hover:bg-red-700 transition"
+                >
+                  Detener grabación
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
     </main>
   );
 }

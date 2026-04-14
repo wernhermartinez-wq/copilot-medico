@@ -269,37 +269,33 @@ if (userError || !user) {
                         Sin consultas registradas por ahora
                       </p>
                     )}
-
-                    <p className="mt-2 text-xs text-gray-400">
-                      Alta: {new Date(paciente.created_at).toLocaleString("es-ES")}
-                    </p>
                   </Link>
 
-                  <div className="flex shrink-0 flex-wrap gap-3">
+                  <div className="flex shrink-0 items-center gap-2 flex-wrap">
                     <Link
                       href={`/pacientes/${paciente.id}`}
-                      className="inline-block rounded-xl border border-gray-300 px-4 py-2 text-sm font-medium text-gray-800 hover:bg-gray-50"
+                      className="inline-flex items-center rounded-xl border border-stone-400 bg-stone-100 px-4 py-2 text-sm font-medium text-stone-800 hover:bg-stone-200 transition"
                     >
-                      Ver ficha
-                    </Link>
-
-                    <Link
-                      href={`/nueva-consulta?prefillBusqueda=${encodeURIComponent(
-                        `${paciente.nombre} ${paciente.apellido}`
-                      )}&pacienteId=${paciente.id}`}
-                      className="inline-block rounded-xl bg-black px-4 py-2 text-sm font-medium text-white"
-                    >
-                      Nueva consulta
+                      Ficha paciente
                     </Link>
 
                     {paciente.ultimaConsulta && (
                       <Link
                         href={`/pacientes/${paciente.id}/consultas/${paciente.ultimaConsulta.id}`}
-                        className="inline-block rounded-xl border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-800 hover:bg-gray-50"
+                        className="inline-flex items-center rounded-xl border border-stone-400 bg-stone-100 px-4 py-2 text-sm font-medium text-stone-800 hover:bg-stone-200 transition"
                       >
                         Última consulta
                       </Link>
                     )}
+
+                    <Link
+                      href={`/nueva-consulta?prefillBusqueda=${encodeURIComponent(
+                        `${paciente.nombre} ${paciente.apellido}`
+                      )}&pacienteId=${paciente.id}`}
+                      className="inline-flex items-center rounded-xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700"
+                    >
+                      Nueva consulta
+                    </Link>
                   </div>
                 </div>
               </div>
