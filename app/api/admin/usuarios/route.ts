@@ -28,6 +28,77 @@ function getSupabaseServerClient(accessToken: string) {
   );
 }
 
+export async function GET(req: Request) {
+  try {
+    const authHeader = req.headers.get("authorization");
+    const accessToken = authHeader?.startsWith("Bearer ")
+      ? authHeader.replace("Bearer ", "").trim()
+      : null;
+
+    if (!accessToken) {
+      return NextResponse.json(
+        { error: "No autorizado: falta token de sesión." },
+        { status: 401 }
+      );
+    }
+
+    const supabaseServer = getSupabaseServerClient(accessToken);
+
+    const {
+      data: { user },
+      error: userError,
+    } = await supabaseServer.auth.getUser();
+
+    if (userError || !user) {
+      return NextResponse.json(
+        { error: "No autorizado: sesión inválida." },
+        { status: 401 }
+      );
+    }
+
+    const { data: adminProfile, error: profileError } = await supabaseAdmin
+      .from("usuarios")
+      .select("id, rol")
+      .eq("id", user.id)
+      .maybeSingle();
+
+    if (profileError || !adminProfile) {
+      return NextResponse.json(
+        { error: "No se pudo validar el perfil del usuario." },
+        { status: 403 }
+      );
+    }
+
+    if (adminProfile.rol !== "admin") {
+      return NextResponse.json(
+        { error: "Acceso denegado: solo un administrador puede listar usuarios." },
+        { status: 403 }
+      );
+    }
+
+    const { data: usuarios, error: usuariosError } = await supabaseAdmin
+      .from("usuarios")
+      .select(
+        "id, nombre, email, rol, activo, nombre_profesional, numero_colegiado, email_profesional, telefono_profesional"
+      )
+      .order("nombre");
+
+    if (usuariosError) {
+      return NextResponse.json(
+        { error: usuariosError.message || "No se pudo listar usuarios." },
+        { status: 500 }
+      );
+    }
+
+    return NextResponse.json({ usuarios: usuarios || [] });
+  } catch (error) {
+    const message =
+      error instanceof Error ? error.message : "Error interno del servidor.";
+
+    return NextResponse.json({ error: message }, { status: 500 });
+  }
+}
+
 export async function POST(req: Request) {
   try {
     const authHeader = req.headers.get("authorization");

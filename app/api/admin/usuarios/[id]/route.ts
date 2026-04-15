@@ -190,23 +190,75 @@ export async function DELETE(
       );
     }
 
-    const { error: authError } = await supabaseAdmin.auth.admin.deleteUser(id);
+    const authHeader = req.headers.get("authorization");
+    const accessToken = authHeader?.startsWith("Bearer ")
+      ? authHeader.replace("Bearer ", "").trim()
+      : null;
 
-    if (authError && !authError.message.toLowerCase().includes("user not found")) {
+    if (!accessToken) {
       return NextResponse.json(
-        { error: authError.message },
+        { error: "No autorizado: falta token de sesión." },
+        { status: 401 }
+      );
+    }
+
+    const supabaseServer = getSupabaseServerClient(accessToken);
+
+    const {
+      data: { user: authUser },
+      error: userError,
+    } = await supabaseServer.auth.getUser();
+
+    if (userError || !authUser) {
+      return NextResponse.json(
+        { error: "No autorizado: sesión inválida." },
+        { status: 401 }
+      );
+    }
+
+    if (authUser.id === id) {
+      return NextResponse.json(
+        { error: "No puedes eliminar tu propio usuario." },
+        { status: 403 }
+      );
+    }
+
+    const { count: pacientesCount, error: pacientesError } = await supabaseAdmin
+      .from("pacientes")
+      .select("id", { count: "exact", head: true })
+      .eq("user_id", id);
+
+    if (pacientesError) {
+      return NextResponse.json(
+        { error: "Error al verificar datos asociados." },
         { status: 500 }
       );
     }
 
-    const { error: dbError } = await supabaseAdmin
+    if (pacientesCount && pacientesCount > 0) {
+      return NextResponse.json(
+        { error: "No se puede eliminar un usuario con datos clínicos asociados" },
+        { status: 409 }
+      );
+    }
+
+    const { error: deleteAuthError } = await supabaseAdmin.auth.admin.deleteUser(id);
+
+    if (deleteAuthError && !deleteAuthError.message.toLowerCase().includes("user not found")) {
+      return NextResponse.json(
+        { error: deleteAuthError.message || "No se pudo eliminar el usuario de Auth." },
+        { status: 500 }
+      );
+    }
+
+    const { error: deleteDbError } = await supabaseAdmin
       .from("usuarios")
       .delete()
       .eq("id", id);
 
-    if (dbError) {
+    if (deleteDbError) {
       return NextResponse.json(
-        { error: dbError.message },
+        { error: deleteDbError.message || "No se pudo eliminar el usuario de la base de datos." },
         { status: 500 }
       );
     }

@@ -168,6 +168,60 @@ function UsuarioItem({
     }
   }
 
+  async function eliminarUsuario() {
+    const confirmado = confirm(
+      "Esta acción eliminará el usuario de forma permanente. ¿Deseas continuar?"
+    );
+
+    if (!confirmado) {
+      return;
+    }
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      if (!usuario.id || typeof usuario.id !== "string") {
+        throw new Error("Usuario sin ID válido.");
+      }
+
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+
+      const accessToken = session?.access_token;
+
+      if (!accessToken) {
+        throw new Error("No hay sesión activa.");
+      }
+
+      const res = await fetch(`/api/admin/usuarios/${usuario.id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      const contentType = res.headers.get("content-type") || "";
+      const result = contentType.includes("application/json")
+        ? await res.json()
+        : { error: await res.text() };
+
+      if (!res.ok) {
+        if (res.status === 409) {
+          throw new Error(result.error || "No se puede eliminar este usuario");
+        }
+        throw new Error(result.error || "Error al eliminar usuario");
+      }
+
+      await onUpdate();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Error desconocido");
+    } finally {
+      setLoading(false);
+    }
+  }
+
   function resetCampos() {
     setNombre(usuario.nombre ?? "");
     setRol(usuario.rol === "admin" ? "admin" : "medico");
@@ -270,6 +324,15 @@ function UsuarioItem({
         >
           {usuario.activo ? "Desactivar" : "Activar"}
         </button>
+
+        <button
+          type="button"
+          onClick={eliminarUsuario}
+          disabled={loading}
+          className="rounded-xl border border-red-300 bg-white px-4 py-2.5 text-sm font-medium text-red-600 hover:bg-red-50 disabled:opacity-60"
+        >
+          Eliminar
+        </button>
       </div>
 
       {error && (
@@ -297,19 +360,38 @@ export default function AdminUsuariosPage() {
   const [error, setError] = useState<string | null>(null);
 
   async function cargarUsuarios() {
-    const { data, error } = await supabase
-      .from("usuarios")
-      .select(
-        "id, nombre, email, rol, activo, nombre_profesional, numero_colegiado, email_profesional, telefono_profesional"
-      )
-      .order("nombre");
+    try {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
 
-    if (error) {
-      setError(error.message);
-      return;
+      const accessToken = session?.access_token;
+
+      if (!accessToken) {
+        setError("No hay sesión activa.");
+        return;
+      }
+
+      const res = await fetch("/api/admin/usuarios", {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      const contentType = res.headers.get("content-type") || "";
+      const result = contentType.includes("application/json")
+        ? await res.json()
+        : { error: await res.text() };
+
+      if (!res.ok) {
+        setError(result.error || "Error al cargar usuarios");
+        return;
+      }
+
+      setUsuarios(result.usuarios || []);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Error desconocido");
     }
-
-    setUsuarios((data as Usuario[]) || []);
   }
 
   useEffect(() => {
