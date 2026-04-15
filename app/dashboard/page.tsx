@@ -145,6 +145,7 @@ if (userError || !user) {
         nombreProfesional={userProfile?.nombre_profesional || undefined}
         nombreUsuario={userProfile?.nombre || undefined}
         rol={userProfile?.rol}
+        userSexo={userProfile?.sexo}
         acciones={
           <div className="flex items-center gap-2">
             <Link

@@ -623,6 +623,7 @@ export default function NuevaConsultaPageClient() {
       nombreProfesional={userProfile?.nombre_profesional || undefined}
       nombreUsuario={userProfile?.nombre || undefined}
       rol={userProfile?.rol}
+      userSexo={userProfile?.sexo}
       acciones={
         <a
           href="/dashboard"
@@ -634,7 +635,7 @@ export default function NuevaConsultaPageClient() {
       }
     />
 
-  <div className="mx-auto -mt-10 max-w-4xl px-4 pb-6 sm:px-6 sm:pb-6 lg:px-8 lg:pb-8">
+  <div className="mx-auto -mt-20 max-w-4xl px-4 pb-6 sm:px-6 sm:pb-6 lg:px-8 lg:pb-8">
 <section className="relative pt-0 pb-6 sm:pb-6">
   <div className="relative z-10 -mt-8 mb-6 rounded-[28px] border border-white/60 bg-white/95 p-4 shadow-[0_20px_50px_rgba(15,47,122,0.12)] backdrop-blur-sm">
     <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">

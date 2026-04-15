@@ -11,6 +11,7 @@ type CreateUserBody = {
   numero_colegiado?: string;
   email_profesional?: string;
   telefono_profesional?: string;
+  sexo?: string;
 };
 
 function getSupabaseServerClient(accessToken: string) {
@@ -85,6 +86,7 @@ export async function POST(req: Request) {
     const numero_colegiado = body.numero_colegiado?.trim() || null;
     const email_profesional = body.email_profesional?.trim() || null;
     const telefono_profesional = body.telefono_profesional?.trim() || null;
+    const sexo = body.sexo?.trim() || null;
 
     if (!nombre) {
       return NextResponse.json(
@@ -136,6 +138,7 @@ export async function POST(req: Request) {
       nombre,
       rol,
       activo: true,
+      sexo,
       nombre_profesional,
       numero_colegiado,
       email_profesional,

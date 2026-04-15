@@ -1,0 +1,9 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "crons": [
+    {
+      "path": "/api/cleanup-audios",
+      "schedule": "0 0 * * *"
+    }
+  ]
+}

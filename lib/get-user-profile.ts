@@ -10,6 +10,7 @@ export type UserProfile = {
   numero_colegiado: string | null;
   email_profesional: string | null;
   telefono_profesional: string | null;
+  sexo: string | null;
 };
 
 export async function getUserProfile(): Promise<UserProfile | null> {
@@ -25,7 +26,7 @@ export async function getUserProfile(): Promise<UserProfile | null> {
   const { data, error } = await supabase
     .from("usuarios")
     .select(
-      "id, email, nombre, rol, activo, nombre_profesional, numero_colegiado, email_profesional, telefono_profesional"
+      "id, email, nombre, rol, activo, nombre_profesional, numero_colegiado, email_profesional, telefono_profesional, sexo"
     )
     .eq("id", user.id)
     .maybeSingle();
@@ -41,6 +42,7 @@ export async function getUserProfile(): Promise<UserProfile | null> {
       numero_colegiado: null,
       email_profesional: null,
       telefono_profesional: null,
+      sexo: null,
     };
   }
 
@@ -54,5 +56,6 @@ export async function getUserProfile(): Promise<UserProfile | null> {
     numero_colegiado: data.numero_colegiado,
     email_profesional: data.email_profesional,
     telefono_profesional: data.telefono_profesional,
+    sexo: data.sexo,
   };
 }

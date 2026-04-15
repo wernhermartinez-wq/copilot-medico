@@ -142,6 +142,7 @@ export default function NuevoPacientePageClient() {
         nombreProfesional={userProfile?.nombre_profesional || undefined}
         nombreUsuario={userProfile?.nombre || undefined}
         rol={userProfile?.rol}
+        userSexo={userProfile?.sexo}
         acciones={
           <div className="flex flex-wrap items-center gap-2">
             {returnTo ? (
@@ -174,7 +175,7 @@ export default function NuevoPacientePageClient() {
       />
       <div className="pointer-events-none fixed inset-x-0 bottom-0 z-0 h-[28vh] bg-gradient-to-t from-transparent via-white/25 to-white" />
 
-      <div className="relative z-10 mx-auto max-w-4xl">
+      <div className="relative z-10 mx-auto max-w-4xl -mt-4">
         <section className="rounded-2xl bg-white border border-gray-200 shadow-sm p-4 sm:p-6">
           <form className="space-y-5" onSubmit={handleSubmit}>
             <div>

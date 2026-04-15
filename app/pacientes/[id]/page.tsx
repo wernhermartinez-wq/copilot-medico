@@ -129,6 +129,7 @@ export default function PacientePage() {
           nombreProfesional={userProfile?.nombre_profesional || undefined}
           nombreUsuario={userProfile?.nombre || undefined}
           rol={userProfile?.rol}
+          userSexo={userProfile?.sexo}
           acciones={
             <div className="flex gap-3">
               <Link
@@ -165,6 +166,7 @@ export default function PacientePage() {
           nombreProfesional={userProfile?.nombre_profesional || undefined}
           nombreUsuario={userProfile?.nombre || undefined}
           rol={userProfile?.rol}
+          userSexo={userProfile?.sexo}
           acciones={
             <div className="flex gap-3">
               <Link
@@ -206,6 +208,7 @@ export default function PacientePage() {
         nombreProfesional={userProfile?.nombre_profesional || undefined}
         nombreUsuario={userProfile?.nombre || undefined}
         rol={userProfile?.rol}
+        userSexo={userProfile?.sexo}
         acciones={
           <div className="flex gap-3">
             <Link

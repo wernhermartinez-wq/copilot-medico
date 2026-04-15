@@ -152,6 +152,7 @@ export default function SeleccionarPacientePageClient() {
         nombreProfesional={userProfile?.nombre_profesional || undefined}
         nombreUsuario={userProfile?.nombre || undefined}
         rol={userProfile?.rol}
+        userSexo={userProfile?.sexo}
       />
 
       <div className="mx-auto max-w-4xl">

@@ -455,6 +455,7 @@ export default function ConsultaPage() {
           nombreProfesional={userProfile?.nombre_profesional || undefined}
           nombreUsuario={userProfile?.nombre || undefined}
           rol={userProfile?.rol}
+          userSexo={userProfile?.sexo}
           backHref={`/pacientes/${pacienteId}`}
           backLabel="Volver a la ficha"
         />
@@ -477,6 +478,7 @@ export default function ConsultaPage() {
           nombreProfesional={userProfile?.nombre_profesional || undefined}
           nombreUsuario={userProfile?.nombre || undefined}
           rol={userProfile?.rol}
+          userSexo={userProfile?.sexo}
           backHref={`/pacientes/${pacienteId}`}
           backLabel="Volver a la ficha"
         />
@@ -536,6 +538,7 @@ export default function ConsultaPage() {
         nombreProfesional={userProfile?.nombre_profesional || undefined}
         nombreUsuario={userProfile?.nombre || undefined}
         rol={userProfile?.rol}
+        userSexo={userProfile?.sexo}
         acciones={
           <div className="flex gap-2">
             <Link

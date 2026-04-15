@@ -292,6 +292,7 @@ export default function AdminUsuariosPage() {
   const [numeroColegiado, setNumeroColegiado] = useState("");
   const [emailProfesional, setEmailProfesional] = useState("");
   const [telefonoProfesional, setTelefonoProfesional] = useState("");
+  const [sexo, setSexo] = useState<string>("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -349,6 +350,7 @@ export default function AdminUsuariosPage() {
           email,
           password,
           rol,
+          sexo,
           nombre_profesional: nombreProfesional,
           numero_colegiado: numeroColegiado,
           email_profesional: emailProfesional,
@@ -373,6 +375,7 @@ export default function AdminUsuariosPage() {
       setNumeroColegiado("");
       setEmailProfesional("");
       setTelefonoProfesional("");
+      setSexo("");
 
       await cargarUsuarios();
     } catch (err) {
@@ -410,6 +413,7 @@ export default function AdminUsuariosPage() {
           subtitulo="Acceso restringido"
           nombreUsuario={profile.nombre || profile.email || "Usuario"}
           rol={profile.rol}
+          userSexo={profile.sexo}
           backHref="/dashboard"
           backLabel="Volver al panel"
         />
@@ -430,6 +434,7 @@ export default function AdminUsuariosPage() {
         nombreProfesional={profile.nombre_profesional || undefined}
         nombreUsuario={profile.nombre || profile.email || undefined}
         rol={profile.rol}
+        userSexo={profile.sexo}
         backHref="/dashboard"
         backLabel="Volver al panel"
       />
@@ -500,6 +505,16 @@ export default function AdminUsuariosPage() {
                 onChange={(e) => setTelefonoProfesional(e.target.value)}
                 className="w-full rounded-xl border border-gray-300 px-4 py-3 text-gray-900 outline-none focus:border-gray-400"
               />
+
+              <select
+                value={sexo}
+                onChange={(e) => setSexo(e.target.value)}
+                className="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-gray-900 outline-none focus:border-gray-400"
+              >
+                <option value="">Seleccionar sexo</option>
+                <option value="hombre">Hombre</option>
+                <option value="mujer">Mujer</option>
+              </select>
             </div>
 
             <div className="mt-4">
